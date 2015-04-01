@@ -50,7 +50,7 @@
     _cellZone = [[SLTStickyLayoutItemZone alloc] initWithZoneRect:[self cellZoneRect]];
     
     _cellZone.itemSize = _itemSize;
-    _cellZone.numberOfCells = _numberOfCells;
+    _cellZone.numberOfItems = _numberOfCells;
     _cellZone.minimumLineSpacing = _minimumLineSpacing;
     _cellZone.interitemSpacing = _minimumInteritemSpacing;
 }

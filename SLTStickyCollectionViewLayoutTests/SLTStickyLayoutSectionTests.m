@@ -16,41 +16,19 @@
 
 @implementation SLTStickyLayoutSectionTests
 
-- (void)testSectionWidthOnlyCells {
-    SLTStickyLayoutSection *section = [[SLTStickyLayoutSection alloc] initWithSectionRect:CGRectMake(0, 0, 0, 50)];
-    section.numberOfCells = 14;
-    section.itemSize = CGSizeMake(30, 10);
-    section.minimumLineSpacing = 5.f;
-    section.minimumInteritemSpacing = 5.f;
-    section.distanceBetweenHeaderAndCells = 0.f;
-    section.distanceBetweenFooterAndCells = 0.f;
-    
+- (void)testSectionWidthNoAccesoryViews {
+    SLTStickyLayoutSection *section = [self createDefaultSectionWithRect:CGRectMake(0, 0, 0, 50)];
     section.headerHeight = 0.f;
     section.footerHeight = 0.f;
-    
-    section.headerContentWidth = 0.f;
-    section.footerContentWidth = 0.f;
     [section prepareIntermediateMetrics];
     
     XCTAssertEqual([section sectionWidth], 170.f, @"The section width is not calculated correctly");
 }
 
 
-- (void)testSectionWidthFooter {
-    SLTStickyLayoutSection *section = [[SLTStickyLayoutSection alloc] initWithSectionRect:CGRectMake(0, 0, 0, 50)];
-    section.numberOfCells = 14;
-    section.itemSize = CGSizeMake(30, 10);
-    section.minimumLineSpacing = 5.f;
-    section.minimumInteritemSpacing = 5.f;
-    
-    section.distanceBetweenHeaderAndCells = 0.f;
-    section.distanceBetweenFooterAndCells = 10.f;
-    
+- (void)testSectionWithFooter {
+    SLTStickyLayoutSection *section = [self createDefaultSectionWithRect:CGRectMake(0, 0, 0, 50)];
     section.headerHeight = 0.f;
-    section.footerHeight = 10.f;
-    
-    section.headerContentWidth = 0.f;
-    section.footerContentWidth = 0.f;
     [section prepareIntermediateMetrics];
     
     XCTAssertEqual([section sectionWidth], 240.f, @"The section width is not calculated correctly");
@@ -58,78 +36,36 @@
 
 
 - (void)testSectionWidthHeader {
-    SLTStickyLayoutSection *section = [[SLTStickyLayoutSection alloc] initWithSectionRect:CGRectMake(0, 0, 0, 50)];
-    section.numberOfCells = 14;
-    section.itemSize = CGSizeMake(30, 10);
-    section.minimumLineSpacing = 5.f;
-    section.minimumInteritemSpacing = 5.f;
-    
-    section.distanceBetweenHeaderAndCells = 10.f;
-    section.distanceBetweenFooterAndCells = 0.f;
-    
-    section.headerHeight = 5.f;
+    SLTStickyLayoutSection *section = [self createDefaultSectionWithRect:CGRectMake(0, 0, 0, 50)];
     section.footerHeight = 0.f;
-    
-    section.headerContentWidth = 0.f;
-    section.footerContentWidth = 0.f;
     [section prepareIntermediateMetrics];
     
     XCTAssertEqual([section sectionWidth], 240.f, @"The section width is not calculated correctly");
 }
+
 
 - (void)testSectionWidthHeaderAndFooter {
-    SLTStickyLayoutSection *section = [[SLTStickyLayoutSection alloc] initWithSectionRect:CGRectMake(0, 0, 0, 60)];
-    section.numberOfCells = 14;
-    section.itemSize = CGSizeMake(30, 10);
-    section.minimumLineSpacing = 5.f;
-    section.minimumInteritemSpacing = 5.f;
-    
-    section.distanceBetweenHeaderAndCells = 10.f;
-    section.distanceBetweenFooterAndCells = 10.f;
-    
-    section.headerHeight = 5.f;
-    section.footerHeight = 5.f;
-    
-    section.headerContentWidth = 0.f;
-    section.footerContentWidth = 0.f;
+    SLTStickyLayoutSection *section = [self createDefaultSectionWithRect:CGRectMake(0, 0, 0, 60)];
     [section prepareIntermediateMetrics];
     
     XCTAssertEqual([section sectionWidth], 240.f, @"The section width is not calculated correctly");
 }
 
-- (void)testSectionWidthBigHeader{
-    SLTStickyLayoutSection *section = [[SLTStickyLayoutSection alloc] initWithSectionRect:CGRectMake(0, 0, 0, 60)];
+
+- (void)testSectionWidthBigHeader {
+    SLTStickyLayoutSection *section = [self createDefaultSectionWithRect:CGRectMake(0, 0, 0, 60)];
     section.numberOfCells = 1;
-    section.itemSize = CGSizeMake(30, 10);
-    section.minimumLineSpacing = 5.f;
-    section.minimumInteritemSpacing = 5.f;
-    
-    section.distanceBetweenHeaderAndCells = 10.f;
-    section.distanceBetweenFooterAndCells = 10.f;
-    
-    section.headerHeight = 5.f;
-    section.footerHeight = 5.f;
-    
     section.headerContentWidth = 120.f;
-    section.footerContentWidth = 0.f;
+    section.footerContentWidth = 10.f;
     [section prepareIntermediateMetrics];
     
     XCTAssertEqual([section sectionWidth], section.headerContentWidth, @"The section width is not calculated correctly");
 }
 
-- (void)testSectionWidthBigFooter{
-    SLTStickyLayoutSection *section = [[SLTStickyLayoutSection alloc] initWithSectionRect:CGRectMake(0, 0, 0, 60)];
+
+- (void)testSectionWidthBigFooter {
+    SLTStickyLayoutSection *section = [self createDefaultSectionWithRect:CGRectMake(0, 0, 0, 60)];
     section.numberOfCells = 1;
-    section.itemSize = CGSizeMake(30, 10);
-    section.minimumLineSpacing = 5.f;
-    section.minimumInteritemSpacing = 5.f;
-    
-    section.distanceBetweenHeaderAndCells = 10.f;
-    section.distanceBetweenFooterAndCells = 10.f;
-    
-    section.headerHeight = 5.f;
-    section.footerHeight = 5.f;
-    
     section.headerContentWidth = 0.f;
     section.footerContentWidth = 120.f;
     [section prepareIntermediateMetrics];
@@ -138,19 +74,8 @@
 }
 
 
-- (void)testItemFrameCalculus {
-    SLTStickyLayoutSection *section = [[SLTStickyLayoutSection alloc] initWithSectionRect:CGRectMake(0, 0, 0, 100)];
-    section.numberOfCells = 14;
-    section.itemSize = CGSizeMake(30, 10);
-    section.minimumLineSpacing = 5.f;
-    section.minimumInteritemSpacing = 5.f;
-    
-    section.distanceBetweenHeaderAndCells = 10.f;
-    section.distanceBetweenFooterAndCells = 10.f;
-    
-    section.headerHeight = 5.f;
-    section.footerHeight = 5.f;
-    
+- (void)testFrameForItems {
+    SLTStickyLayoutSection *section = [self createDefaultSectionWithRect:CGRectMake(0, 0, 0, 100)];
     section.headerContentWidth = 0.f;
     section.footerContentWidth = 120.f;
     [section prepareIntermediateMetrics];
@@ -162,17 +87,9 @@
 
 
 - (void)testHeaderFrameWhenVisibleRectIsNotShowingHeader {
-    SLTStickyLayoutSection *section = [[SLTStickyLayoutSection alloc] initWithSectionRect:CGRectMake(10, 0, 0, 100)];
-    section.numberOfCells = 14;
-    section.itemSize = CGSizeMake(30, 10);
-    section.minimumLineSpacing = 5.f;
-    section.minimumInteritemSpacing = 5.f;
-    
-    section.distanceBetweenHeaderAndCells = 10.f;
-    section.distanceBetweenFooterAndCells = 10.f;
-    
+    SLTStickyLayoutSection *section = [self createDefaultSectionWithRect:CGRectMake(10, 0, 0, 100)];
+    section.footerHeight = 0.f;
     section.headerHeight = 5.f;
-    
     section.headerContentWidth = 30.f;
     [section prepareIntermediateMetrics];
     
@@ -180,18 +97,11 @@
     XCTAssertEqual(headerRect.origin.x, 10, @"Should return initial frame if visible Rect is out of section header");
 }
 
+
 - (void)testHeaderFrameWhenVisibleRectHasOffset {
-    SLTStickyLayoutSection *section = [[SLTStickyLayoutSection alloc] initWithSectionRect:CGRectMake(10, 0, 0, 100)];
-    section.numberOfCells = 14;
-    section.itemSize = CGSizeMake(30, 10);
-    section.minimumLineSpacing = 5.f;
-    section.minimumInteritemSpacing = 5.f;
-    
-    section.distanceBetweenHeaderAndCells = 10.f;
-    section.distanceBetweenFooterAndCells = 10.f;
-    
+    SLTStickyLayoutSection *section = [self createDefaultSectionWithRect:CGRectMake(10, 0, 0, 100)];
+    section.footerHeight = 0.f;
     section.headerHeight = 5.f;
-    
     section.headerContentWidth = 30.f;
     [section prepareIntermediateMetrics];
     
@@ -205,18 +115,11 @@
     XCTAssertTrue(CGRectEqualToRect(headerRect, expectedRect), @"Should return initial frame if visible Rect is out of section header");
 }
 
+
 - (void)testHeaderFrameWhenSectionEnds {
-    SLTStickyLayoutSection *section = [[SLTStickyLayoutSection alloc] initWithSectionRect:CGRectMake(10, 0, 0, 100)];
-    section.numberOfCells = 14;
-    section.itemSize = CGSizeMake(30, 10);
-    section.minimumLineSpacing = 5.f;
-    section.minimumInteritemSpacing = 5.f;
-    
-    section.distanceBetweenHeaderAndCells = 10.f;
-    section.distanceBetweenFooterAndCells = 10.f;
-    
+    SLTStickyLayoutSection *section = [self createDefaultSectionWithRect:CGRectMake(10, 0, 0, 100)];
+    section.footerHeight = 0.f;
     section.headerHeight = 5.f;
-    
     section.headerContentWidth = 30.f;
     [section prepareIntermediateMetrics];
     
@@ -228,6 +131,30 @@
     }];
     
     XCTAssertTrue(CGRectEqualToRect(headerRect, expectedRect), @"Should return initial frame if visible Rect is out of section header");
+}
+
+
+#pragma mark - Helping Methods
+
+- (SLTStickyLayoutSection *)createDefaultSectionWithRect:(CGRect)rect {
+    SLTStickyLayoutSection *section = [[SLTStickyLayoutSection alloc] initWithSectionRect:rect];
+    
+    section.numberOfCells = 14;
+    section.itemSize = CGSizeMake(30, 10);
+    
+    section.minimumLineSpacing = 5.f;
+    section.minimumInteritemSpacing = 5.f;
+    
+    section.headerHeight = 5.f;
+    section.footerHeight = 5.f;
+    
+    section.headerContentWidth = 10.f;
+    section.footerContentWidth = 10.f;
+    
+    section.distanceBetweenHeaderAndCells = 10.f;
+    section.distanceBetweenFooterAndCells = 10.f;
+    
+    return section;
 }
 
 @end

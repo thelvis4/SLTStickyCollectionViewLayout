@@ -9,22 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface SLTStickyLayoutSection : NSObject
-- (instancetype)initWithSectionRect:(CGRect)sectionRect;
-- (CGRect)frameForItemAtIndex:(NSInteger)index;
-- (CGFloat)sectionWidth;
-- (CGRect)sectionRect;
-- (void)prepareIntermediateMetrics;
-
-- (NSArray *)indexPathsOfItemsInRect:(CGRect)rect;
-- (NSIndexPath *)headerIndexPath;
-- (NSIndexPath *)footerIndexPath;
-
-- (BOOL)headerIsVisibleInRect:(CGRect)rect;
-- (BOOL)footerIsVisibleInRect:(CGRect)rect;
-
-- (CGRect)headerFrameForVisibleRect:(CGRect)visibleRect;
-- (CGRect)footerFrameForVisibleRect:(CGRect)visibleRect;
-
 @property (assign, nonatomic) NSInteger sectionNumber;
 
 @property (assign, nonatomic) NSInteger numberOfCells;
@@ -43,4 +27,22 @@
 @property (nonatomic) CGFloat footerContentWidth;
 
 @property (nonatomic) CGFloat headerInset;
+
+- (instancetype)initWithSectionRect:(CGRect)sectionRect;
+- (void)prepareIntermediateMetrics;
+
+- (CGRect)frameForItemAtIndex:(NSInteger)index;
+- (CGFloat)sectionWidth;
+- (CGRect)sectionRect;
+
+- (NSArray *)indexPathsOfItemsInRect:(CGRect)rect;
+- (NSIndexPath *)headerIndexPath;
+- (NSIndexPath *)footerIndexPath;
+
+- (BOOL)headerIsVisibleInRect:(CGRect)rect;
+- (BOOL)footerIsVisibleInRect:(CGRect)rect;
+
+- (CGRect)headerFrameForVisibleRect:(CGRect)visibleRect;
+- (CGRect)footerFrameForVisibleRect:(CGRect)visibleRect;
+
 @end

@@ -45,7 +45,7 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
 
 - (CGRect)frameForItemAtIndex:(NSInteger)index {
     CGFloat lineSpacing = [self calculateLineSpacing];
-    Position position = [self cellPositionForCellAtIndex:index];
+    Position position = [self positionForItemAtIndex:index];
     CGFloat xOrigin = CGRectGetMinX(_rect) + position.column * (_itemSize.width + _interitemSpacing);
     CGFloat yOrigin = CGRectGetMinY(_rect) + position.line * (_itemSize.height + lineSpacing);
     
@@ -54,7 +54,7 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
 
 
 - (CGFloat)calculateZoneWidth {
-    if (_numberOfCells == 0) return 0.f;
+    if (_numberOfItems == 0) return 0.f;
     
     NSInteger numberOfColumns = [self numberOfColumns];
     if (numberOfColumns == 0) return _itemSize.width;
@@ -65,28 +65,28 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
 
 
 - (NSArray *)indexesOfItemsInRect:(CGRect)rect {
-    CGRect cellZoneRect = CGRectIntersection(rect, [self zoneRect]);
-    if (CGRectIsNull(cellZoneRect)) return @[];
+    CGRect intersectedRect = CGRectIntersection(rect, [self zoneRect]);
+    if (CGRectIsNull(intersectedRect)) return @[];
     
-    return [self buildMapOfItemIndexesForRect:cellZoneRect];
+    return [self buildMapOfItemIndexesForRect:intersectedRect];
 }
 
 
 #pragma mark - Private Methods
 
-- (Position)cellPositionForCellAtIndex:(NSInteger)index {
+- (Position)positionForItemAtIndex:(NSInteger)index {
     if (0 == index) return PositionMake(0, 0);
     
     NSInteger numberOfLines = [self numberOfLines];
     BOOL isEnoughSpace = (numberOfLines != 0);
-    NSInteger column = isEnoughSpace ? index / numberOfLines : index;
+    NSInteger column = isEnoughSpace ? index / numberOfLines : index; // there is at least a line of items
     NSInteger line = isEnoughSpace ? index % numberOfLines : 0;
     
     return PositionMake(line, column);
 }
 
 
-- (NSInteger)indexForCellPosition:(Position)position {
+- (NSInteger)indexForPosition:(Position)position {
     if (PositionIsEqualToPosition(position, PositionMake(0, 0))) return 0;
     
     return position.column * [self numberOfLines] + position.line;
@@ -95,8 +95,8 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
 
 - (CGFloat)calculateLineSpacing {
     NSInteger numberOfLines = [self numberOfLines];
-    CGFloat spaceOcupiedByCells = numberOfLines * _itemSize.height;
-    CGFloat totalLineSpacing = _rect.size.height - spaceOcupiedByCells;
+    CGFloat spaceOcupiedByItems = numberOfLines * _itemSize.height;
+    CGFloat totalLineSpacing = _rect.size.height - spaceOcupiedByItems;
     
     NSInteger numberOfSpaces = numberOfLines - 1;
     
@@ -112,11 +112,11 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
 - (NSInteger)numberOfColumns {
     NSInteger numberOfLines = [self numberOfLines];
     
-    return ceilf((CGFloat)self.numberOfCells / (CGFloat)numberOfLines);
+    return ceilf((CGFloat)self.numberOfItems / (CGFloat)numberOfLines);
 }
 
 
-#pragma mark - Cells In Rect Mapping
+#pragma mark - Item Frames Mapping
 
 - (NSArray *)buildMapOfItemIndexesForRect:(CGRect)rect {
     NSInteger firstLine = [self firstLineInRect:rect];
@@ -128,8 +128,8 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
     for (NSInteger line = firstLine; line <= lastLine; line++) {
         for (NSInteger column = firstColumn; column <= lastColumn; column++) {
             Position position = PositionMake(line, column);
-            NSInteger index = [self indexForCellPosition:position];
-            if (index < self.numberOfCells) {
+            NSInteger index = [self indexForPosition:position];
+            if (index < self.numberOfItems) {
                 [indexes addObject:@(index)];
             }
         }
@@ -140,10 +140,12 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
 
 
 - (CGRect)zoneRect {
-    CGRect zoneRect = _rect;
-    zoneRect.size.width = [self calculateZoneWidth];
+    CGFloat x = CGRectGetMinX(_rect);
+    CGFloat y = CGRectGetMinY(_rect);
+    CGFloat height = CGRectGetHeight(_rect);
+    CGFloat width = [self calculateZoneWidth];
     
-    return zoneRect;
+    return CGRectMake(x, y, width, height);
 }
 
 
