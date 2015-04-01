@@ -10,6 +10,10 @@
 		A377C9811ACBE53B00DD0558 /* SLTStickyCollectionViewLayout.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = A377C9801ACBE53B00DD0558 /* SLTStickyCollectionViewLayout.h */; };
 		A377C9831ACBE53C00DD0558 /* SLTStickyCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = A377C9821ACBE53C00DD0558 /* SLTStickyCollectionViewLayout.m */; };
 		A377C9891ACBE53C00DD0558 /* libSLTStickyCollectionViewLayout.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A377C97D1ACBE53B00DD0558 /* libSLTStickyCollectionViewLayout.a */; };
+		A377C9991ACBE5FB00DD0558 /* SLTStickyLayoutSection.m in Sources */ = {isa = PBXBuildFile; fileRef = A377C9981ACBE5FB00DD0558 /* SLTStickyLayoutSection.m */; };
+		A377C99C1ACBE64200DD0558 /* SLTStickyLayoutItemZone.m in Sources */ = {isa = PBXBuildFile; fileRef = A377C99B1ACBE64200DD0558 /* SLTStickyLayoutItemZone.m */; };
+		A377C99F1ACBE6EE00DD0558 /* SLTStickyLayoutItemZoneTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A377C99D1ACBE6EE00DD0558 /* SLTStickyLayoutItemZoneTests.m */; };
+		A377C9A01ACBE6EE00DD0558 /* SLTStickyLayoutSectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A377C99E1ACBE6EE00DD0558 /* SLTStickyLayoutSectionTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,6 +45,12 @@
 		A377C9821ACBE53C00DD0558 /* SLTStickyCollectionViewLayout.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SLTStickyCollectionViewLayout.m; sourceTree = "<group>"; };
 		A377C9881ACBE53C00DD0558 /* SLTStickyCollectionViewLayoutTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SLTStickyCollectionViewLayoutTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A377C98E1ACBE53C00DD0558 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A377C9971ACBE5FB00DD0558 /* SLTStickyLayoutSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLTStickyLayoutSection.h; sourceTree = "<group>"; };
+		A377C9981ACBE5FB00DD0558 /* SLTStickyLayoutSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTStickyLayoutSection.m; sourceTree = "<group>"; };
+		A377C99A1ACBE64200DD0558 /* SLTStickyLayoutItemZone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLTStickyLayoutItemZone.h; sourceTree = "<group>"; };
+		A377C99B1ACBE64200DD0558 /* SLTStickyLayoutItemZone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTStickyLayoutItemZone.m; sourceTree = "<group>"; };
+		A377C99D1ACBE6EE00DD0558 /* SLTStickyLayoutItemZoneTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTStickyLayoutItemZoneTests.m; sourceTree = "<group>"; };
+		A377C99E1ACBE6EE00DD0558 /* SLTStickyLayoutSectionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTStickyLayoutSectionTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +95,10 @@
 			children = (
 				A377C9801ACBE53B00DD0558 /* SLTStickyCollectionViewLayout.h */,
 				A377C9821ACBE53C00DD0558 /* SLTStickyCollectionViewLayout.m */,
+				A377C9971ACBE5FB00DD0558 /* SLTStickyLayoutSection.h */,
+				A377C9981ACBE5FB00DD0558 /* SLTStickyLayoutSection.m */,
+				A377C99A1ACBE64200DD0558 /* SLTStickyLayoutItemZone.h */,
+				A377C99B1ACBE64200DD0558 /* SLTStickyLayoutItemZone.m */,
 			);
 			path = SLTStickyCollectionViewLayout;
 			sourceTree = "<group>";
@@ -92,6 +106,8 @@
 		A377C98C1ACBE53C00DD0558 /* SLTStickyCollectionViewLayoutTests */ = {
 			isa = PBXGroup;
 			children = (
+				A377C99D1ACBE6EE00DD0558 /* SLTStickyLayoutItemZoneTests.m */,
+				A377C99E1ACBE6EE00DD0558 /* SLTStickyLayoutSectionTests.m */,
 				A377C98D1ACBE53C00DD0558 /* Supporting Files */,
 			);
 			path = SLTStickyCollectionViewLayoutTests;
@@ -115,6 +131,7 @@
 				A377C9791ACBE53B00DD0558 /* Sources */,
 				A377C97A1ACBE53B00DD0558 /* Frameworks */,
 				A377C97B1ACBE53B00DD0558 /* CopyFiles */,
+				A377C9A11ACBE82800DD0558 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -188,11 +205,29 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		A377C9A11ACBE82800DD0558 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\nset -o pipefail\n\n#################[ Tests: helps workaround any future bugs in Xcode ]########\n#\nDEBUG_THIS_SCRIPT=\"false\"\n\nif [ $DEBUG_THIS_SCRIPT = \"true\" ]\nthen\necho \"########### TESTS #############\"\necho \"Use the following variables when debugging this script; note that they may change on recursions\"\necho \"BUILD_DIR = $BUILD_DIR\"\necho \"BUILD_ROOT = $BUILD_ROOT\"\necho \"CONFIGURATION_BUILD_DIR = $CONFIGURATION_BUILD_DIR\"\necho \"BUILT_PRODUCTS_DIR = $BUILT_PRODUCTS_DIR\"\necho \"CONFIGURATION_TEMP_DIR = $CONFIGURATION_TEMP_DIR\"\necho \"TARGET_BUILD_DIR = $TARGET_BUILD_DIR\"\nfi\n\n#####################[ part 1 ]##################\n# First, work out the BASESDK version number (NB: Apple ought to report this, but they hide it)\n#    (incidental: searching for substrings in sh is a nightmare! Sob)\n\nSDK_VERSION=$(echo ${SDK_NAME} | grep -o '.\\{3\\}$')\n\n# Next, work out if we're in SIM or DEVICE\n\nif [ ${PLATFORM_NAME} = \"iphonesimulator\" ]\nthen\nOTHER_SDK_TO_BUILD=iphoneos${SDK_VERSION}\nelse\nOTHER_SDK_TO_BUILD=iphonesimulator${SDK_VERSION}\nfi\n\necho \"XCode has selected SDK: ${PLATFORM_NAME} with version: ${SDK_VERSION} (although back-targetting: ${IPHONEOS_DEPLOYMENT_TARGET})\"\necho \"...therefore, OTHER_SDK_TO_BUILD = ${OTHER_SDK_TO_BUILD}\"\n#\n#####################[ end of part 1 ]##################\n\n#####################[ part 2 ]##################\n#\n# IF this is the original invocation, invoke WHATEVER other builds are required\n#\n# Xcode is already building ONE target...\n#\n# ...but this is a LIBRARY, so Apple is wrong to set it to build just one.\n# ...we need to build ALL targets\n# ...we MUST NOT re-build the target that is ALREADY being built: Xcode WILL CRASH YOUR COMPUTER if you try this (infinite recursion!)\n#\n#\n# So: build ONLY the missing platforms/configurations.\n\nif [ \"true\" == ${ALREADYINVOKED:-false} ]\nthen\necho \"RECURSION: I am NOT the root invocation, so I'm NOT going to recurse\"\nelse\n# CRITICAL:\n# Prevent infinite recursion (Xcode sucks)\nexport ALREADYINVOKED=\"true\"\n\necho \"RECURSION: I am the root ... recursing all missing build targets NOW...\"\necho \"RECURSION: ...about to invoke: xcodebuild -configuration \\\"${CONFIGURATION}\\\" -project \\\"${PROJECT_NAME}.xcodeproj\\\" -target \\\"${TARGET_NAME}\\\" -sdk \\\"${OTHER_SDK_TO_BUILD}\\\" ${ACTION} RUN_CLANG_STATIC_ANALYZER=NO\" BUILD_DIR=\\\"${BUILD_DIR}\\\" BUILD_ROOT=\\\"${BUILD_ROOT}\\\" SYMROOT=\\\"${SYMROOT}\\\"\n\nxcodebuild -configuration \"${CONFIGURATION}\" -project \"${PROJECT_NAME}.xcodeproj\" -target \"${TARGET_NAME}\" -sdk \"${OTHER_SDK_TO_BUILD}\" ${ACTION} RUN_CLANG_STATIC_ANALYZER=NO BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\" SYMROOT=\"${SYMROOT}\"\n\nACTION=\"build\"\n\n#Merge all platform binaries as a fat binary for each configurations.\n\n# Calculate where the (multiple) built files are coming from:\nCURRENTCONFIG_DEVICE_DIR=${SYMROOT}/${CONFIGURATION}-iphoneos\nCURRENTCONFIG_SIMULATOR_DIR=${SYMROOT}/${CONFIGURATION}-iphonesimulator\n\necho \"Taking device build from: ${CURRENTCONFIG_DEVICE_DIR}\"\necho \"Taking simulator build from: ${CURRENTCONFIG_SIMULATOR_DIR}\"\n\nCREATING_UNIVERSAL_DIR=${SYMROOT}/${CONFIGURATION}-universal\necho \"...I will output a universal build to: ${CREATING_UNIVERSAL_DIR}\"\n\n# ... remove the products of previous runs of this script\n#      NB: this directory is ONLY created by this script - it should be safe to delete!\n\nrm -rf \"${CREATING_UNIVERSAL_DIR}\"\nmkdir \"${CREATING_UNIVERSAL_DIR}\"\n\n#\necho \"lipo: for current configuration (${CONFIGURATION}) creating output file: ${CREATING_UNIVERSAL_DIR}/${EXECUTABLE_NAME}\"\nxcrun -sdk iphoneos lipo -create -output \"${CREATING_UNIVERSAL_DIR}/${EXECUTABLE_NAME}\" \"${CURRENTCONFIG_DEVICE_DIR}/${EXECUTABLE_NAME}\" \"${CURRENTCONFIG_SIMULATOR_DIR}/${EXECUTABLE_NAME}\"\n\n#########\n#\n# Added: StackOverflow suggestion to also copy \"include\" files\n#    (untested, but should work OK)\n#\necho \"Fetching headers from ${PUBLIC_HEADERS_FOLDER_PATH}\"\necho \"  (if you embed your library project in another project, you will need to add\"\necho \"   a \"User Search Headers\" build setting of: (NB INCLUDE THE DOUBLE QUOTES BELOW!)\"\necho '        \"$(TARGET_BUILD_DIR)/usr/local/include/\"'\nif [ -d \"${CURRENTCONFIG_DEVICE_DIR}${PUBLIC_HEADERS_FOLDER_PATH}\" ]\nthen\nmkdir -p \"${CREATING_UNIVERSAL_DIR}${PUBLIC_HEADERS_FOLDER_PATH}\"\n# * needs to be outside the double quotes?\ncp -r \"${CURRENTCONFIG_DEVICE_DIR}${PUBLIC_HEADERS_FOLDER_PATH}\"* \"${CREATING_UNIVERSAL_DIR}${PUBLIC_HEADERS_FOLDER_PATH}\"\nfi\nfi";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		A377C9791ACBE53B00DD0558 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A377C99C1ACBE64200DD0558 /* SLTStickyLayoutItemZone.m in Sources */,
+				A377C9991ACBE5FB00DD0558 /* SLTStickyLayoutSection.m in Sources */,
 				A377C9831ACBE53C00DD0558 /* SLTStickyCollectionViewLayout.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -201,6 +236,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A377C9A01ACBE6EE00DD0558 /* SLTStickyLayoutSectionTests.m in Sources */,
+				A377C99F1ACBE6EE00DD0558 /* SLTStickyLayoutItemZoneTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -292,6 +329,7 @@
 		A377C9921ACBE53C00DD0558 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				LLVM_LTO = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -301,6 +339,8 @@
 		A377C9931ACBE53C00DD0558 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_OPTIMIZATION_LEVEL = fast;
+				LLVM_LTO = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -356,6 +396,7 @@
 				A377C9931ACBE53C00DD0558 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A377C9941ACBE53C00DD0558 /* Build configuration list for PBXNativeTarget "SLTStickyCollectionViewLayoutTests" */ = {
 			isa = XCConfigurationList;
@@ -364,6 +405,7 @@
 				A377C9961ACBE53C00DD0558 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
