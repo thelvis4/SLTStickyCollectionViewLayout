@@ -53,8 +53,8 @@ CGRect CGRectMakeWithSize(CGFloat x, CGFloat y, CGSize size) {
 
 - (void)testFrameForItemAtIndexWithZoneOffset {
     CGSize itemSize = CGSizeMake(30, 10);
-    CGRect rect = CGRectMake(30, 65, 100, 30);
-    SLTStickyLayoutItemZone *zone = [self itemZoneWithZoneRect:rect itemSize:itemSize];
+    SLTMetrics metrics = SLTMetricsMake(30, 65, 30);
+    SLTStickyLayoutItemZone *zone = [self itemZoneWithZoneMetrics:metrics itemSize:itemSize];
     
     CGRect cellRect = [zone frameForItemAtIndex:0];
     CGRect expectedRect = CGRectMakeWithSize(30, 65, itemSize);
@@ -89,8 +89,8 @@ CGRect CGRectMakeWithSize(CGFloat x, CGFloat y, CGSize size) {
 #pragma mark - Testing indexesOfItemsInRect method
 
 - (void)testIndexOfItemsInRect {
-    CGRect rect = CGRectMake(30, 65, 0, 90);
-    SLTStickyLayoutItemZone *zone = [self itemZoneWithZoneRect:rect itemSize:CGSizeMake(30, 10)];
+    SLTMetrics metrics = SLTMetricsMake(30, 65, 90);
+    SLTStickyLayoutItemZone *zone = [self itemZoneWithZoneMetrics:metrics itemSize:CGSizeMake(30, 10)];
     zone.numberOfItems = 14;
     
     NSArray *indexes = [zone indexesOfItemsInRect:CGRectMake(0, 80, 60, 80)];
@@ -99,8 +99,8 @@ CGRect CGRectMakeWithSize(CGFloat x, CGFloat y, CGSize size) {
 
 
 - (void)testCellIndexesInWrongRect {
-    CGRect rect = CGRectMake(30, 65, 0, 90);
-    SLTStickyLayoutItemZone *zone = [self itemZoneWithZoneRect:rect itemSize:CGSizeMake(30, 10)];
+    SLTMetrics metrics = SLTMetricsMake(30, 65, 90);
+    SLTStickyLayoutItemZone *zone = [self itemZoneWithZoneMetrics:metrics itemSize:CGSizeMake(30, 10)];
     zone.numberOfItems = 14;
     
     NSArray *indexes = [zone indexesOfItemsInRect:CGRectMake(0, 0, 200, 50)];
@@ -109,8 +109,8 @@ CGRect CGRectMakeWithSize(CGFloat x, CGFloat y, CGSize size) {
 
 
 - (void)testCellIndexesAreCorrectInRect {
-    CGRect rect = CGRectMake(0, 0, 0, 90);
-    SLTStickyLayoutItemZone *zone = [self itemZoneWithZoneRect:rect itemSize:CGSizeMake(20, 20)];
+    SLTMetrics metrics = SLTMetricsMake(0, 0, 90);
+    SLTStickyLayoutItemZone *zone = [self itemZoneWithZoneMetrics:metrics itemSize:CGSizeMake(20, 20)];
     zone.numberOfItems = 11;
     
     NSArray *indexes = [zone indexesOfItemsInRect:CGRectMake(30, 22, 65, 49)];
@@ -126,8 +126,8 @@ CGRect CGRectMakeWithSize(CGFloat x, CGFloat y, CGSize size) {
 #pragma mark - Helping methods
 
 - (SLTStickyLayoutItemZone *)itemZoneForNumberOfItems:(NSInteger)numberOfItems {
-    SLTStickyLayoutItemZone *zone = [self itemZoneWithZoneRect:CGRectMake(30, 65, 0, 30)
-                                                      itemSize:CGSizeMake(30, 10)];
+    SLTStickyLayoutItemZone *zone = [self itemZoneWithZoneMetrics:SLTMetricsMake(30, 65, 30)
+                                                         itemSize:CGSizeMake(30, 10)];
     zone.numberOfItems = numberOfItems;
     
     return zone;
@@ -135,14 +135,14 @@ CGRect CGRectMakeWithSize(CGFloat x, CGFloat y, CGSize size) {
 
 
 - (SLTStickyLayoutItemZone *)itemZoneWithItemSize:(CGSize)itemSize {
-    CGRect rect = CGRectMake(0, 0, 0, 30);
-    
-    return [self itemZoneWithZoneRect:rect itemSize:itemSize];
+    SLTMetrics metrics = SLTMetricsMake(0, 0, 30);
+
+    return [self itemZoneWithZoneMetrics:metrics itemSize:itemSize];
 }
 
 
-- (SLTStickyLayoutItemZone *)itemZoneWithZoneRect:(CGRect)rect itemSize:(CGSize)itemSize {
-    SLTStickyLayoutItemZone *zone = [self zoneWithRect:rect];
+- (SLTStickyLayoutItemZone *)itemZoneWithZoneMetrics:(SLTMetrics)metrics itemSize:(CGSize)itemSize {
+    SLTStickyLayoutItemZone *zone = [self zoneWithMetrics:metrics];
     zone.itemSize = itemSize;
     zone.minimumLineSpacing = 5.f;
     zone.interitemSpacing = 5.f;
@@ -150,8 +150,9 @@ CGRect CGRectMakeWithSize(CGFloat x, CGFloat y, CGSize size) {
     return zone;
 }
 
-- (SLTStickyLayoutItemZone *)zoneWithRect:(CGRect)rect {
-    return [[SLTStickyLayoutItemZone alloc] initWithZoneRect:rect];
+
+- (SLTStickyLayoutItemZone *)zoneWithMetrics:(SLTMetrics)metrics {
+    return [[SLTStickyLayoutItemZone alloc] initWithMetrics:metrics];
 }
 
 @end

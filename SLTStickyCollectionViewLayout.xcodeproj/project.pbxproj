@@ -14,6 +14,7 @@
 		A377C99C1ACBE64200DD0558 /* SLTStickyLayoutItemZone.m in Sources */ = {isa = PBXBuildFile; fileRef = A377C99B1ACBE64200DD0558 /* SLTStickyLayoutItemZone.m */; };
 		A377C99F1ACBE6EE00DD0558 /* SLTStickyLayoutItemZoneTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A377C99D1ACBE6EE00DD0558 /* SLTStickyLayoutItemZoneTests.m */; };
 		A377C9A01ACBE6EE00DD0558 /* SLTStickyLayoutSectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A377C99E1ACBE6EE00DD0558 /* SLTStickyLayoutSectionTests.m */; };
+		A38655B51ACD43D60016FCA7 /* SLTMetrics.m in Sources */ = {isa = PBXBuildFile; fileRef = A38655B41ACD43D60016FCA7 /* SLTMetrics.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,8 @@
 		A377C99B1ACBE64200DD0558 /* SLTStickyLayoutItemZone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTStickyLayoutItemZone.m; sourceTree = "<group>"; };
 		A377C99D1ACBE6EE00DD0558 /* SLTStickyLayoutItemZoneTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTStickyLayoutItemZoneTests.m; sourceTree = "<group>"; };
 		A377C99E1ACBE6EE00DD0558 /* SLTStickyLayoutSectionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTStickyLayoutSectionTests.m; sourceTree = "<group>"; };
+		A38655B31ACD43D60016FCA7 /* SLTMetrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLTMetrics.h; sourceTree = "<group>"; };
+		A38655B41ACD43D60016FCA7 /* SLTMetrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTMetrics.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +102,8 @@
 				A377C9981ACBE5FB00DD0558 /* SLTStickyLayoutSection.m */,
 				A377C99A1ACBE64200DD0558 /* SLTStickyLayoutItemZone.h */,
 				A377C99B1ACBE64200DD0558 /* SLTStickyLayoutItemZone.m */,
+				A38655B31ACD43D60016FCA7 /* SLTMetrics.h */,
+				A38655B41ACD43D60016FCA7 /* SLTMetrics.m */,
 			);
 			path = SLTStickyCollectionViewLayout;
 			sourceTree = "<group>";
@@ -227,6 +232,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A377C99C1ACBE64200DD0558 /* SLTStickyLayoutItemZone.m in Sources */,
+				A38655B51ACD43D60016FCA7 /* SLTMetrics.m in Sources */,
 				A377C9991ACBE5FB00DD0558 /* SLTStickyLayoutSection.m in Sources */,
 				A377C9831ACBE53C00DD0558 /* SLTStickyCollectionViewLayout.m in Sources */,
 			);

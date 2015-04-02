@@ -10,7 +10,7 @@
 #import "SLTStickyLayoutItemZone.h"
 
 @interface SLTStickyLayoutSection ()
-@property (nonatomic) CGRect rect;
+@property (nonatomic) SLTMetrics metrics;
 @property (strong, nonatomic) SLTStickyLayoutItemZone *cellZone;
 
 @end
@@ -18,10 +18,10 @@
 
 @implementation SLTStickyLayoutSection
 
-- (instancetype)initWithSectionRect:(CGRect)sectionRect {
+- (instancetype)initWithMetrics:(SLTMetrics)metrics {
     self = [super init];
     if (self) {
-        _rect = sectionRect;
+        _metrics = metrics;
     }
     
     return self;
@@ -39,15 +39,12 @@
 
 
 - (CGRect)sectionRect {
-    CGRect rect = _rect;
-    rect.size.width = [self sectionWidth];
-    
-    return rect;
+    return CGRectFromMetrics(_metrics, [self sectionWidth]);
 }
 
 
 - (void)prepareIntermediateMetrics {
-    _cellZone = [[SLTStickyLayoutItemZone alloc] initWithZoneRect:[self cellZoneRect]];
+    _cellZone = [[SLTStickyLayoutItemZone alloc] initWithMetrics:[self calculateItemZoneMetrics]];
     
     _cellZone.itemSize = _itemSize;
     _cellZone.numberOfItems = _numberOfCells;
@@ -104,9 +101,9 @@
 
 
 - (CGFloat)headerXPositionForVisibleRect:(CGRect)visibleRect {
-    BOOL headerViewSticksToSectionMargin = (CGRectGetMinX(visibleRect) <= CGRectGetMinX(_rect) - _headerInset);
+    BOOL headerViewSticksToSectionMargin = (CGRectGetMinX(visibleRect) <= _metrics.x - _headerInset);
     if (headerViewSticksToSectionMargin) {
-        return CGRectGetMinX(_rect);
+        return _metrics.x;
     } else {
         return CGRectGetMinX(visibleRect) + _headerInset;
     }
@@ -173,27 +170,27 @@
 }
 
 
-- (CGRect)cellZoneRect {
-    CGRect zoneRect = _rect;
+- (SLTMetrics)calculateItemZoneMetrics {
+    SLTMetrics metrics = _metrics;
     if (_headerHeight > 0.f) {
-        zoneRect.size.height -= _headerHeight;
-        zoneRect.origin.y += _headerHeight;
+        metrics.height -= _headerHeight;
+        metrics.y += _headerHeight;
         
-        zoneRect.size.height -= _distanceBetweenHeaderAndCells;
-        zoneRect.origin.y += _distanceBetweenHeaderAndCells;
+        metrics.height -= _distanceBetweenHeaderAndCells;
+        metrics.y += _distanceBetweenHeaderAndCells;
     }
     
     if (_footerHeight > 0.f) {
-        zoneRect.size.height -= _footerHeight;
-        zoneRect.size.height -= _distanceBetweenFooterAndCells;
+        metrics.height -= _footerHeight;
+        metrics.height -= _distanceBetweenFooterAndCells;
     }
     
-    return zoneRect;
+    return  metrics;
 }
 
 
 - (CGRect)headerRect {
-    return CGRectMake(CGRectGetMinX(_rect), CGRectGetMinY(_rect), [self sectionWidth], _headerHeight);
+    return CGRectMake(_metrics.x, _metrics.y, [self sectionWidth], _headerHeight);
 }
 
 
@@ -205,7 +202,7 @@
 
 
 - (CGRect)initialHeaderContentRect {
-    return CGRectMake(CGRectGetMinX(_rect), CGRectGetMinY(_rect), _headerContentWidth, _headerHeight);
+    return CGRectMake(_metrics.x, _metrics.y, _headerContentWidth, _headerHeight);
 }
 
 
@@ -217,9 +214,9 @@
 
 
 - (CGPoint)footerOrigin {
-    CGFloat yOrigin = CGRectGetMaxY(_rect) - _footerHeight;
+    CGFloat yOrigin = SLTMetricsGetMaxY(_metrics) - _footerHeight;
     
-    return CGPointMake(CGRectGetMinX(_rect), yOrigin);
+    return CGPointMake(_metrics.x, yOrigin);
 }
 
 

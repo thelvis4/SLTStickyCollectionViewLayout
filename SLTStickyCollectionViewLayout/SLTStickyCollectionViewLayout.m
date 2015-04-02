@@ -51,8 +51,8 @@
     
     NSMutableArray *sections = [NSMutableArray arrayWithCapacity:numSections];
     for(NSInteger sectionNumber = 0; sectionNumber < numSections; sectionNumber++) {
-        CGRect sectionRect = (0 == sectionNumber) ? [self rectForFirstSection] : [self rectForSectionFollowingSection:[sections lastObject]];
-        SLTStickyLayoutSection *section = [[SLTStickyLayoutSection alloc] initWithSectionRect:sectionRect];
+        SLTMetrics metrics = (0 == sectionNumber) ? [self metricsForFirstSection] : [self metricsForSectionFollowingSection:[sections lastObject]];
+        SLTStickyLayoutSection *section = [[SLTStickyLayoutSection alloc] initWithMetrics:metrics];
         [self configureSection:section sectionNumber:sectionNumber];
         [sections addObject:section];
     }
@@ -232,7 +232,7 @@
 }
 
 
-- (CGRect)rectForFirstSection {
+- (SLTMetrics)metricsForFirstSection {
     CGSize collectionViewSize = self.collectionView.bounds.size;
     UIEdgeInsets insets = self.sectionInset;
     
@@ -240,11 +240,11 @@
     CGFloat yOrigin = insets.top;
     CGFloat height = collectionViewSize.height - insets.top - insets.bottom;
     
-    return CGRectMake(xOrigin, yOrigin, 0.f, height);
+    return SLTMetricsMake(xOrigin, yOrigin, height);
 }
 
 
-- (CGRect)rectForSectionFollowingSection:(SLTStickyLayoutSection *)section {
+- (SLTMetrics)metricsForSectionFollowingSection:(SLTStickyLayoutSection *)section {
     CGRect previousSectionRect = [section sectionRect];
     
     CGSize collectionViewSize = self.collectionView.bounds.size;
@@ -255,7 +255,7 @@
     CGFloat yOrigin = insets.top;
     CGFloat height = collectionViewSize.height - insets.top - insets.bottom;
     
-    return CGRectMake(xOrigin, yOrigin, 0.f, height);
+    return SLTMetricsMake(xOrigin, yOrigin, height);
 }
 
 

@@ -27,16 +27,16 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
 }
 
 @interface SLTStickyLayoutItemZone ()
-@property (assign, nonatomic) CGRect rect;
+@property (assign, nonatomic) SLTMetrics metrics;
 
 @end
 
 @implementation SLTStickyLayoutItemZone
 
-- (instancetype)initWithZoneRect:(CGRect)zoneRect {
+- (instancetype)initWithMetrics:(SLTMetrics)metrics {
     self = [super init];
     if (self) {
-        _rect = zoneRect;
+        _metrics = metrics;
     }
     
     return self;
@@ -46,8 +46,8 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
 - (CGRect)frameForItemAtIndex:(NSInteger)index {
     CGFloat lineSpacing = [self calculateLineSpacing];
     Position position = [self positionForItemAtIndex:index];
-    CGFloat xOrigin = CGRectGetMinX(_rect) + position.column * (_itemSize.width + _interitemSpacing);
-    CGFloat yOrigin = CGRectGetMinY(_rect) + position.line * (_itemSize.height + lineSpacing);
+    CGFloat xOrigin = _metrics.x + position.column * (_itemSize.width + _interitemSpacing);
+    CGFloat yOrigin = _metrics.y + position.line * (_itemSize.height + lineSpacing);
     
     return CGRectMake(xOrigin, yOrigin, _itemSize.width, _itemSize.height);
 }
@@ -96,7 +96,7 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
 - (CGFloat)calculateLineSpacing {
     NSInteger numberOfLines = [self numberOfLines];
     CGFloat spaceOcupiedByItems = numberOfLines * _itemSize.height;
-    CGFloat totalLineSpacing = _rect.size.height - spaceOcupiedByItems;
+    CGFloat totalLineSpacing = _metrics.height - spaceOcupiedByItems;
     
     NSInteger numberOfSpaces = numberOfLines - 1;
     
@@ -105,7 +105,7 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
 
 
 - (NSInteger)numberOfLines {
-    return floorf((_rect.size.height + _minimumLineSpacing) / (_itemSize.height + _minimumLineSpacing));
+    return floorf((_metrics.height + _minimumLineSpacing) / (_itemSize.height + _minimumLineSpacing));
 }
 
 
@@ -140,9 +140,9 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
 
 
 - (CGRect)zoneRect {
-    CGFloat x = CGRectGetMinX(_rect);
-    CGFloat y = CGRectGetMinY(_rect);
-    CGFloat height = CGRectGetHeight(_rect);
+    CGFloat x = _metrics.x;
+    CGFloat y = _metrics.y;
+    CGFloat height = _metrics.height;
     CGFloat width = [self calculateZoneWidth];
     
     return CGRectMake(x, y, width, height);
@@ -151,7 +151,7 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
 
 - (NSInteger)firstColumnInRect:(CGRect)rect {
     CGFloat x = CGRectGetMinX(rect);
-    CGFloat column = (x - CGRectGetMinX(_rect) + _interitemSpacing) / (_itemSize.width + _interitemSpacing);
+    CGFloat column = (x - _metrics.x + _interitemSpacing) / (_itemSize.width + _interitemSpacing);
     
     return floorf(column);
 }
@@ -159,7 +159,7 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
 
 - (NSInteger)lastColumnInRect:(CGRect)rect {
     CGFloat x = CGRectGetMaxX(rect);
-    CGFloat column = (x - CGRectGetMinX(_rect)) / (_itemSize.width + _interitemSpacing);
+    CGFloat column = (x - _metrics.x) / (_itemSize.width + _interitemSpacing);
     
     return floorf(column);
 }
@@ -168,7 +168,7 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
 - (NSInteger)firstLineInRect:(CGRect)rect {
     CGFloat lineSpacing = [self calculateLineSpacing];
     CGFloat y = CGRectGetMinY(rect);
-    CGFloat line = (y - CGRectGetMinY(_rect) + lineSpacing) / (_itemSize.height + lineSpacing);
+    CGFloat line = (y - _metrics.y + lineSpacing) / (_itemSize.height + lineSpacing);
     
     return floorf(line);
 }
@@ -176,7 +176,7 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
 
 - (NSInteger)lastLineInRect:(CGRect)rect {
     CGFloat y = CGRectGetMaxY(rect);
-    CGFloat line = (y - CGRectGetMinY(_rect)) / (_itemSize.height + [self calculateLineSpacing]);
+    CGFloat line = (y - _metrics.y) / (_itemSize.height + [self calculateLineSpacing]);
     
     return floorf(line);
 }

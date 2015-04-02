@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SLTMetrics.h"
 
 @interface SLTStickyLayoutSection : NSObject
 @property (assign, nonatomic) NSInteger sectionNumber;
@@ -28,7 +29,7 @@
 
 @property (nonatomic) CGFloat headerInset;
 
-- (instancetype)initWithSectionRect:(CGRect)sectionRect;
+- (instancetype)initWithMetrics:(SLTMetrics)metrics;
 - (void)prepareIntermediateMetrics;
 
 - (CGRect)frameForItemAtIndex:(NSInteger)index;

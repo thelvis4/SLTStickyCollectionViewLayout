@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SLTMetrics.h"
 
 @interface SLTStickyLayoutItemZone : NSObject
-- (instancetype)initWithZoneRect:(CGRect)zoneRect;
+- (instancetype)initWithMetrics:(SLTMetrics)metrics;
 
 - (CGRect)frameForItemAtIndex:(NSInteger)index;
 - (NSArray *)indexesOfItemsInRect:(CGRect)rect;

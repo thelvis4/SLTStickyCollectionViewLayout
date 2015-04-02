@@ -137,7 +137,8 @@
 #pragma mark - Helping Methods
 
 - (SLTStickyLayoutSection *)createDefaultSectionWithRect:(CGRect)rect {
-    SLTStickyLayoutSection *section = [[SLTStickyLayoutSection alloc] initWithSectionRect:rect];
+    SLTMetrics metrics = SLTMetricsFromRect(rect);
+    SLTStickyLayoutSection *section = [[SLTStickyLayoutSection alloc] initWithMetrics:metrics];
     
     section.numberOfCells = 14;
     section.itemSize = CGSizeMake(30, 10);
