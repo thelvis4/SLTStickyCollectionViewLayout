@@ -12,7 +12,7 @@
 @interface SLTStickyLayoutSection : NSObject
 @property (assign, nonatomic) NSInteger sectionNumber;
 
-@property (assign, nonatomic) NSInteger numberOfCells;
+@property (assign, nonatomic) NSInteger numberOfItems;
 @property (assign, nonatomic) CGSize itemSize;
 
 @property (nonatomic) CGFloat minimumLineSpacing;

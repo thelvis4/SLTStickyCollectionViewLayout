@@ -223,7 +223,7 @@
 
 - (void)configureSection:(SLTStickyLayoutSection *)section sectionNumber:(NSInteger)sectionNumber {
     section.sectionNumber = sectionNumber;
-    section.numberOfCells = [self.collectionView numberOfItemsInSection:sectionNumber];
+    section.numberOfItems = [self.collectionView numberOfItemsInSection:sectionNumber];
     section.itemSize = _itemSize;
     section.minimumLineSpacing = _minimumLineSpacing;
     section.minimumInteritemSpacing = _interitemSpacing;

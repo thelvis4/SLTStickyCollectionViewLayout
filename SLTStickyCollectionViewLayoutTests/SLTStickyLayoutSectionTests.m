@@ -54,7 +54,7 @@
 
 - (void)testSectionWidthBigHeader {
     SLTStickyLayoutSection *section = [self createDefaultSectionWithRect:CGRectMake(0, 0, 0, 60)];
-    section.numberOfCells = 1;
+    section.numberOfItems = 1;
     section.headerContentWidth = 120.f;
     section.footerContentWidth = 10.f;
     [section prepareIntermediateMetrics];
@@ -65,7 +65,7 @@
 
 - (void)testSectionWidthBigFooter {
     SLTStickyLayoutSection *section = [self createDefaultSectionWithRect:CGRectMake(0, 0, 0, 60)];
-    section.numberOfCells = 1;
+    section.numberOfItems = 1;
     section.headerContentWidth = 0.f;
     section.footerContentWidth = 120.f;
     [section prepareIntermediateMetrics];
@@ -156,7 +156,7 @@
     SLTMetrics metrics = SLTMetricsFromRect(rect);
     SLTStickyLayoutSection *section = [[SLTStickyLayoutSection alloc] initWithMetrics:metrics];
     
-    section.numberOfCells = 14;
+    section.numberOfItems = 14;
     section.itemSize = CGSizeMake(30, 10);
     
     section.minimumLineSpacing = 5.f;

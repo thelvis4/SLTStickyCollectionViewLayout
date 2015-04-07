@@ -13,6 +13,8 @@
 @property (nonatomic, readwrite) SLTMetrics metrics;
 @property (strong, nonatomic) SLTStickyLayoutItemZone *itemZone;
 
+@property (strong, nonatomic) NSArray *attributes;
+
 @end
 
 
@@ -32,7 +34,7 @@
     _itemZone = [[SLTStickyLayoutItemZone alloc] initWithMetrics:[self calculateItemZoneMetrics]];
     
     _itemZone.itemSize = _itemSize;
-    _itemZone.numberOfItems = _numberOfCells;
+    _itemZone.numberOfItems = _numberOfItems;
     _itemZone.minimumLineSpacing = _minimumLineSpacing;
     _itemZone.interitemSpacing = _minimumInteritemSpacing;
 }
@@ -110,19 +112,34 @@
 
 
 - (NSArray *)layoutAttributesForItemsInRect:(CGRect)rect {
-     NSArray *indexes = [_itemZone indexesOfItemsInRect:rect];
-    NSMutableArray *attributesArray = [NSMutableArray arrayWithCapacity:[indexes count]];
+    NSMutableArray *attributesInRect = [NSMutableArray array];
     
-    for (NSNumber *index in indexes) {
-        [attributesArray addObject:[self layoutAttributesForItemAtIndex:[index integerValue]]];
+    for (UICollectionViewLayoutAttributes *attributes in self.attributes) {
+        if(CGRectIntersectsRect(rect, attributes.frame)){
+            [attributesInRect addObject:attributes];
+        }
     }
     
-    return [NSArray arrayWithArray:attributesArray];
-
+    return [NSArray arrayWithArray:attributesInRect];
 }
 
 
 #pragma mark - Private Methods
+
+- (NSArray *)attributes {
+    if (_attributes) return _attributes;
+    
+    NSMutableArray *attributes = [NSMutableArray arrayWithCapacity:_numberOfItems];
+    
+    for (NSInteger index = 0; index < _numberOfItems; index++) {
+        [attributes addObject:[self layoutAttributesForItemAtIndex:index]];
+    }
+    
+    _attributes = [NSArray arrayWithArray:attributes];
+    
+    return _attributes;
+}
+
 
 - (SLTMetrics)calculateItemZoneMetrics {
     SLTMetrics metrics = _metrics;
