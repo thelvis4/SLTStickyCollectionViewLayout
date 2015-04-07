@@ -171,10 +171,14 @@
 - (CGPoint)targetContentOffsetForProposedContentOffset:(CGPoint)proposedContentOffset withScrollingVelocity:(CGPoint)velocity {
     if (!_optimizedScrolling) return proposedContentOffset;
     
+    if (proposedContentOffset.x > self.collectionView.contentSize.width - self.collectionView.bounds.size.width - _itemSize.width / 2 - _sectionInset.right) {
+        return proposedContentOffset;
+    }
     CGFloat shiftedX = proposedContentOffset.x + _sectionInset.left;
     
     NSRange indexRange = [self indexRangeOfSectionsForHorizontalOffset:shiftedX];
     if (NSRangeIsUndefined(indexRange)) return proposedContentOffset;
+    NSLog(@"Indexes: %@", NSStringFromRange(indexRange));
     
     BOOL indexContainsOneIndex = (0 == indexRange.length);
     if (indexContainsOneIndex) {
@@ -210,6 +214,12 @@
         CGRect sectionRect = [section sectionRect];
         CGPoint pointInSection = CGPointMake(offset,section.metrics.y);
         if (CGRectContainsPoint(sectionRect, pointInSection)) {
+            
+            if (CGRectGetMaxX(sectionRect) < (offset + _itemSize.width / 2)) {
+                if (index != numberOfSections - 1) {
+                    return NSMakeRange(index, 1);
+                }
+            }
             return NSMakeRange(index, 0);
         }
     }

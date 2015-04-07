@@ -171,8 +171,9 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
 - (NSInteger)lastColumnInRect:(CGRect)rect {
     CGFloat x = CGRectGetMaxX(rect);
     CGFloat column = (x - _metrics.x) / [self distanceBetweenColumns];
-    
-    return floorf(column);
+    NSInteger numberOfColumns = [self numberOfColumns];
+
+    return (column >= numberOfColumns) ? (numberOfColumns - 1) : floorf(column);
 }
 
 
@@ -212,8 +213,9 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
 - (CGFloat)offsetForNearestColumnToOffset:(CGFloat)offset {
     if (offset < _metrics.x) return _metrics.x;
     
-    if (offset > (_metrics.x + [self calculateZoneWidth])) {
-        NSInteger lastColumn = [self lastColumnInRect:[self zoneRect]];
+    CGRect zoneRect = [self zoneRect];
+    if (offset > CGRectGetMaxX(zoneRect)) {
+        NSInteger lastColumn = [self numberOfColumns] - 1;
         return [self xOriginForColumnNumber:lastColumn];
     }
 
@@ -221,7 +223,7 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
     CGFloat addition = distanceBetweenColumns / 2;
     CGFloat x = offset - addition;
     CGRect rect = CGRectMake(x, _metrics.y, distanceBetweenColumns, 0);
-    CGRect intersectedRect = CGRectIntersection(rect, [self zoneRect]);
+    CGRect intersectedRect = CGRectIntersection(rect, zoneRect);
     
     NSInteger firstColumn = [self firstColumnInRect:intersectedRect];
     NSInteger lastColumn = [self lastColumnInRect:intersectedRect];

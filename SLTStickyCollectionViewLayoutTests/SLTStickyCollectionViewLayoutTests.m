@@ -76,11 +76,24 @@ static NSInteger const SLTNumberOfSections = 10;
 }
 
 
+- (void)testWhenProposedOffsetIsBetweenSections {
+    [self runTestForTargetOffsetWithProposedOffset:CGPointMake(7764.f, 0.f)
+                                    expectedOffset:CGPointMake(7785.f, 0.f)];
+}
+
+
+- (void)testWhenProposedOffsetIsAtTheEnd {
+    [self runTestForTargetOffsetWithProposedOffset:CGPointMake(10409.f, 0.f)
+                                    expectedOffset:CGPointMake(10409.f, 0.f)];
+}
+
+
 - (void)testTargetContentOffsetWhenProposedOffsetDoesNotMatchTargetOffset {
     [self runTestForTargetOffsetWithProposedOffset:CGPointMake(455.f, 0.f)
                                     expectedOffset:CGPointMake(465.f, 0.f)];
 
 }
+
 
 - (void)testTargetContentOffsetWithBigTargetOffset {
     [self runTestForTargetOffsetWithProposedOffset:CGPointMake(10180.f, 0.f)
@@ -134,7 +147,7 @@ static NSInteger const SLTNumberOfSections = 10;
     UICollectionView *mock = OCMClassMock([UICollectionView class]);
     OCMStub([mock bounds]).andReturn(CGRectMake(0, 0, 320, 176));
     OCMStub([mock contentOffset]).andReturn(CGPointMake(0, 0));
-    
+    OCMStub([mock contentSize]).andReturn(CGSizeMake(10730, 176));
     OCMStub([mock numberOfSections]).andReturn(SLTNumberOfSections);
     
     for (NSInteger section = 0; section < SLTNumberOfSections; section++) {

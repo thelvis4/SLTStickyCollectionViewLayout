@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 YOPESO. All rights reserved.
 //
 
-// Version 1.0 Beta 3
+// Version 1.0 Beta 4
 
 #import <UIKit/UIKit.h>
 @class SLTStickyCollectionViewLayout;
@@ -98,6 +98,7 @@
 /// @note Default: 0.0
 @property (nonatomic) CGFloat distanceBetweenFooterAndItems;
 
+/// @note Default: NO
 @property (nonatomic, getter=isOptimizedScrolling) BOOL optimizedScrolling;
 
 - (CGRect)frameForSectionAtIndex:(NSInteger)sectionIndex;
