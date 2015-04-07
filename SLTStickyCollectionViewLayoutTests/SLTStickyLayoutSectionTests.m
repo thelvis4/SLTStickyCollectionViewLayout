@@ -134,6 +134,21 @@
 }
 
 
+- (void)testNearestColumnOffset {
+    SLTStickyLayoutSection *section = [self createDefaultSectionWithRect:CGRectMake(10, 0, 0, 100)];
+    section.footerHeight = 0.f;
+    section.headerHeight = 5.f;
+    section.headerContentWidth = 30.f;
+    [section prepareIntermediateMetrics];
+    
+    XCTAssertEqual([section offsetForNearestColumnToOffset:55.0], 45.0, @"Offset is not calculated correctly");
+    XCTAssertEqual([section offsetForNearestColumnToOffset:35.0], 45.0, @"Offset is not calculated correctly");
+    XCTAssertEqual([section offsetForNearestColumnToOffset:0.0], 10, @"Offset is not calculated correctly");
+    XCTAssertEqual([section offsetForNearestColumnToOffset:110.0], 80, @"Offset is not calculated correctly");
+
+}
+
+
 #pragma mark - Helping Methods
 
 - (SLTStickyLayoutSection *)createDefaultSectionWithRect:(CGRect)rect {

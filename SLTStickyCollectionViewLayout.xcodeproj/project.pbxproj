@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A363224F1ACE91C100DC3775 /* SLTUtilitiesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A363224E1ACE91C100DC3775 /* SLTUtilitiesTests.m */; };
+		A36322511ACEC54F00DC3775 /* SLTStickyCollectionViewLayoutTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A36322501ACEC54F00DC3775 /* SLTStickyCollectionViewLayoutTests.m */; };
+		A36322611ACEC5BC00DC3775 /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A36322561ACEC5BC00DC3775 /* libOCMock.a */; };
 		A377C9811ACBE53B00DD0558 /* SLTStickyCollectionViewLayout.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = A377C9801ACBE53B00DD0558 /* SLTStickyCollectionViewLayout.h */; };
 		A377C9831ACBE53C00DD0558 /* SLTStickyCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = A377C9821ACBE53C00DD0558 /* SLTStickyCollectionViewLayout.m */; };
 		A377C9891ACBE53C00DD0558 /* libSLTStickyCollectionViewLayout.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A377C97D1ACBE53B00DD0558 /* libSLTStickyCollectionViewLayout.a */; };
@@ -41,6 +44,18 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A363224E1ACE91C100DC3775 /* SLTUtilitiesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTUtilitiesTests.m; sourceTree = "<group>"; };
+		A36322501ACEC54F00DC3775 /* SLTStickyCollectionViewLayoutTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTStickyCollectionViewLayoutTests.m; sourceTree = "<group>"; };
+		A36322561ACEC5BC00DC3775 /* libOCMock.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libOCMock.a; sourceTree = "<group>"; };
+		A36322581ACEC5BC00DC3775 /* NSNotificationCenter+OCMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNotificationCenter+OCMAdditions.h"; sourceTree = "<group>"; };
+		A36322591ACEC5BC00DC3775 /* OCMArg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMArg.h; sourceTree = "<group>"; };
+		A363225A1ACEC5BC00DC3775 /* OCMConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMConstraint.h; sourceTree = "<group>"; };
+		A363225B1ACEC5BC00DC3775 /* OCMLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMLocation.h; sourceTree = "<group>"; };
+		A363225C1ACEC5BC00DC3775 /* OCMMacroState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMMacroState.h; sourceTree = "<group>"; };
+		A363225D1ACEC5BC00DC3775 /* OCMock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMock.h; sourceTree = "<group>"; };
+		A363225E1ACEC5BC00DC3775 /* OCMockObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMockObject.h; sourceTree = "<group>"; };
+		A363225F1ACEC5BC00DC3775 /* OCMRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMRecorder.h; sourceTree = "<group>"; };
+		A36322601ACEC5BC00DC3775 /* OCMStubRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMStubRecorder.h; sourceTree = "<group>"; };
 		A377C97D1ACBE53B00DD0558 /* libSLTStickyCollectionViewLayout.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSLTStickyCollectionViewLayout.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A377C9801ACBE53B00DD0558 /* SLTStickyCollectionViewLayout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SLTStickyCollectionViewLayout.h; sourceTree = "<group>"; };
 		A377C9821ACBE53C00DD0558 /* SLTStickyCollectionViewLayout.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SLTStickyCollectionViewLayout.m; sourceTree = "<group>"; };
@@ -69,17 +84,52 @@
 			buildActionMask = 2147483647;
 			files = (
 				A377C9891ACBE53C00DD0558 /* libSLTStickyCollectionViewLayout.a in Frameworks */,
+				A36322611ACEC5BC00DC3775 /* libOCMock.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A36322541ACEC5BC00DC3775 /* ExternalSources */ = {
+			isa = PBXGroup;
+			children = (
+				A36322551ACEC5BC00DC3775 /* OCMock3.1.2 */,
+			);
+			path = ExternalSources;
+			sourceTree = "<group>";
+		};
+		A36322551ACEC5BC00DC3775 /* OCMock3.1.2 */ = {
+			isa = PBXGroup;
+			children = (
+				A36322561ACEC5BC00DC3775 /* libOCMock.a */,
+				A36322571ACEC5BC00DC3775 /* OCMock */,
+			);
+			path = OCMock3.1.2;
+			sourceTree = "<group>";
+		};
+		A36322571ACEC5BC00DC3775 /* OCMock */ = {
+			isa = PBXGroup;
+			children = (
+				A36322581ACEC5BC00DC3775 /* NSNotificationCenter+OCMAdditions.h */,
+				A36322591ACEC5BC00DC3775 /* OCMArg.h */,
+				A363225A1ACEC5BC00DC3775 /* OCMConstraint.h */,
+				A363225B1ACEC5BC00DC3775 /* OCMLocation.h */,
+				A363225C1ACEC5BC00DC3775 /* OCMMacroState.h */,
+				A363225D1ACEC5BC00DC3775 /* OCMock.h */,
+				A363225E1ACEC5BC00DC3775 /* OCMockObject.h */,
+				A363225F1ACEC5BC00DC3775 /* OCMRecorder.h */,
+				A36322601ACEC5BC00DC3775 /* OCMStubRecorder.h */,
+			);
+			path = OCMock;
+			sourceTree = "<group>";
+		};
 		A377C9741ACBE53B00DD0558 = {
 			isa = PBXGroup;
 			children = (
 				A377C97F1ACBE53B00DD0558 /* SLTStickyCollectionViewLayout */,
 				A377C98C1ACBE53C00DD0558 /* SLTStickyCollectionViewLayoutTests */,
+				A36322541ACEC5BC00DC3775 /* ExternalSources */,
 				A377C97E1ACBE53B00DD0558 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -111,8 +161,10 @@
 		A377C98C1ACBE53C00DD0558 /* SLTStickyCollectionViewLayoutTests */ = {
 			isa = PBXGroup;
 			children = (
-				A377C99D1ACBE6EE00DD0558 /* SLTStickyLayoutItemZoneTests.m */,
+				A36322501ACEC54F00DC3775 /* SLTStickyCollectionViewLayoutTests.m */,
 				A377C99E1ACBE6EE00DD0558 /* SLTStickyLayoutSectionTests.m */,
+				A377C99D1ACBE6EE00DD0558 /* SLTStickyLayoutItemZoneTests.m */,
+				A363224E1ACE91C100DC3775 /* SLTUtilitiesTests.m */,
 				A377C98D1ACBE53C00DD0558 /* Supporting Files */,
 			);
 			path = SLTStickyCollectionViewLayoutTests;
@@ -242,6 +294,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A363224F1ACE91C100DC3775 /* SLTUtilitiesTests.m in Sources */,
+				A36322511ACEC54F00DC3775 /* SLTStickyCollectionViewLayoutTests.m in Sources */,
 				A377C9A01ACBE6EE00DD0558 /* SLTStickyLayoutSectionTests.m in Sources */,
 				A377C99F1ACBE6EE00DD0558 /* SLTStickyLayoutItemZoneTests.m in Sources */,
 			);
@@ -366,6 +420,16 @@
 				);
 				INFOPLIST_FILE = SLTStickyCollectionViewLayoutTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/ExternalSources/OCMock3.1.2",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					XCTest,
+					"-ObjC",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -379,6 +443,16 @@
 				);
 				INFOPLIST_FILE = SLTStickyCollectionViewLayoutTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/ExternalSources/OCMock3.1.2",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					XCTest,
+					"-ObjC",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

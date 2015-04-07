@@ -10,8 +10,8 @@
 #import "SLTStickyLayoutItemZone.h"
 
 @interface SLTStickyLayoutSection ()
-@property (nonatomic) SLTMetrics metrics;
-@property (strong, nonatomic) SLTStickyLayoutItemZone *cellZone;
+@property (nonatomic, readwrite) SLTMetrics metrics;
+@property (strong, nonatomic) SLTStickyLayoutItemZone *itemZone;
 
 @end
 
@@ -29,12 +29,12 @@
 
 
 - (CGRect)frameForItemAtIndex:(NSInteger)index {
-    return [_cellZone frameForItemAtIndex:index];
+    return [_itemZone frameForItemAtIndex:index];
 }
 
 
 - (CGFloat)sectionWidth {
-    return maximumFloat([_cellZone calculateZoneWidth], _headerContentWidth, _footerContentWidth);
+    return maximumFloat([_itemZone calculateZoneWidth], _headerContentWidth, _footerContentWidth);
 }
 
 
@@ -44,17 +44,17 @@
 
 
 - (void)prepareIntermediateMetrics {
-    _cellZone = [[SLTStickyLayoutItemZone alloc] initWithMetrics:[self calculateItemZoneMetrics]];
+    _itemZone = [[SLTStickyLayoutItemZone alloc] initWithMetrics:[self calculateItemZoneMetrics]];
     
-    _cellZone.itemSize = _itemSize;
-    _cellZone.numberOfItems = _numberOfCells;
-    _cellZone.minimumLineSpacing = _minimumLineSpacing;
-    _cellZone.interitemSpacing = _minimumInteritemSpacing;
+    _itemZone.itemSize = _itemSize;
+    _itemZone.numberOfItems = _numberOfCells;
+    _itemZone.minimumLineSpacing = _minimumLineSpacing;
+    _itemZone.interitemSpacing = _minimumInteritemSpacing;
 }
 
 
 - (NSArray *)indexPathsOfItemsInRect:(CGRect)rect {
-    return [self indexPathsForItemIndexes:[_cellZone indexesOfItemsInRect:rect]];
+    return [self indexPathsForItemIndexes:[_itemZone indexesOfItemsInRect:rect]];
 }
 
 
@@ -219,27 +219,13 @@
     return CGPointMake(_metrics.x, yOrigin);
 }
 
-
-CGRect CGRectFromRectWithX(CGRect rect, CGFloat x) {
-    CGRect changedRect = rect;
-    changedRect.origin.x = x;
-    
-    return changedRect;
-}
+@end
 
 
-CGFloat maximumFloat(CGFloat first, CGFloat second, CGFloat third) {
-    CGFloat max = first;
-    
-    if (second > max) {
-        max = second;
-    }
-    
-    if (third > max) {
-        max = third;
-    }
-    
-    return max;
+@implementation SLTStickyLayoutSection (OptimizedScrolling)
+
+- (CGFloat)offsetForNearestColumnToOffset:(CGFloat)offset {
+    return [self.itemZone offsetForNearestColumnToOffset:offset];
 }
 
 @end

@@ -123,6 +123,28 @@ CGRect CGRectMakeWithSize(CGFloat x, CGFloat y, CGSize size) {
 }
 
 
+- (void)testOffsetForNearestColumn {
+    [self runTestsForTestingOffsetForNearestColumnWithSectionOffset:0];
+    [self runTestsForTestingOffsetForNearestColumnWithSectionOffset:20.5];
+    [self runTestsForTestingOffsetForNearestColumnWithSectionOffset:-20];
+}
+
+
+- (void)runTestsForTestingOffsetForNearestColumnWithSectionOffset:(CGFloat)sectionOffset {
+    SLTMetrics metrics = SLTMetricsMake(sectionOffset, 0, 90);
+    SLTStickyLayoutItemZone *zone = [self itemZoneWithZoneMetrics:metrics itemSize:CGSizeMake(20, 20)];
+    zone.numberOfItems = 11;
+    
+    XCTAssertEqual([zone offsetForNearestColumnToOffset:sectionOffset + 0.0], sectionOffset + 0.0, @"Offset wasn't calculated correctly");
+    XCTAssertEqual([zone offsetForNearestColumnToOffset:sectionOffset + 25.0], sectionOffset + 25.0, @"Offset wasn't calculated correctly");
+    XCTAssertEqual([zone offsetForNearestColumnToOffset:sectionOffset + 60.0], sectionOffset + 50.0, @"Offset wasn't calculated correctly");
+    XCTAssertEqual([zone offsetForNearestColumnToOffset:sectionOffset + 90.0], sectionOffset + 75.0, @"Offset wasn't calculated correctly");
+    XCTAssertEqual([zone offsetForNearestColumnToOffset:sectionOffset + 12.5], sectionOffset + 0.0, @"Offset wasn't calculated correctly");
+    XCTAssertEqual([zone offsetForNearestColumnToOffset:-INFINITY], sectionOffset + 0.0, @"Offset wasn't calculated correctly if input offset is out of item zone");
+    XCTAssertEqual([zone offsetForNearestColumnToOffset:INFINITY], sectionOffset + 75, @"Offset wasn't calculated correctly if input offset is more that last zone point");
+}
+
+
 #pragma mark - Helping methods
 
 - (SLTStickyLayoutItemZone *)itemZoneForNumberOfItems:(NSInteger)numberOfItems {

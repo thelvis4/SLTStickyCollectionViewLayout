@@ -29,6 +29,8 @@
 
 @property (nonatomic) CGFloat headerInset;
 
+@property (nonatomic, readonly) SLTMetrics metrics;
+
 - (instancetype)initWithMetrics:(SLTMetrics)metrics;
 - (void)prepareIntermediateMetrics;
 
@@ -45,5 +47,10 @@
 
 - (CGRect)headerFrameForVisibleRect:(CGRect)visibleRect;
 - (CGRect)footerFrameForVisibleRect:(CGRect)visibleRect;
+
+@end
+
+@interface SLTStickyLayoutSection (OptimizedScrolling)
+- (CGFloat)offsetForNearestColumnToOffset:(CGFloat)offset;
 
 @end

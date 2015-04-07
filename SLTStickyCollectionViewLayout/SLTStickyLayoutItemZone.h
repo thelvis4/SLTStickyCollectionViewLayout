@@ -23,5 +23,9 @@
 @property (nonatomic) CGFloat minimumLineSpacing;
 @property (nonatomic) CGFloat interitemSpacing;
 
+@end
+
+@interface SLTStickyLayoutItemZone (OptimizedScrolling)
+- (CGFloat)offsetForNearestColumnToOffset:(CGFloat)offset;
 
 @end

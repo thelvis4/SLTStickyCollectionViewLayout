@@ -44,10 +44,9 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
 
 
 - (CGRect)frameForItemAtIndex:(NSInteger)index {
-    CGFloat lineSpacing = [self calculateLineSpacing];
     Position position = [self positionForItemAtIndex:index];
-    CGFloat xOrigin = _metrics.x + position.column * (_itemSize.width + _interitemSpacing);
-    CGFloat yOrigin = _metrics.y + position.line * (_itemSize.height + lineSpacing);
+    CGFloat xOrigin = [self xOriginForColumnNumber:position.column];
+    CGFloat yOrigin = [self yOriginForLineNumber:position.line];
     
     return CGRectMake(xOrigin, yOrigin, _itemSize.width, _itemSize.height);
 }
@@ -86,6 +85,16 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
 }
 
 
+- (CGFloat)yOriginForLineNumber:(NSInteger)line {
+    return _metrics.y + line * [self distanceBetweenLines];
+}
+
+
+- (CGFloat)xOriginForColumnNumber:(NSInteger)column {
+    return _metrics.x + column * [self distanceBetweenColumns];
+}
+
+
 - (NSInteger)indexForPosition:(Position)position {
     if (PositionIsEqualToPosition(position, PositionMake(0, 0))) return 0;
     
@@ -95,6 +104,8 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
 
 - (CGFloat)calculateLineSpacing {
     NSInteger numberOfLines = [self numberOfLines];
+    if (1 == numberOfLines) return 0.0;
+    
     CGFloat spaceOcupiedByItems = numberOfLines * _itemSize.height;
     CGFloat totalLineSpacing = _metrics.height - spaceOcupiedByItems;
     
@@ -151,7 +162,7 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
 
 - (NSInteger)firstColumnInRect:(CGRect)rect {
     CGFloat x = CGRectGetMinX(rect);
-    CGFloat column = (x - _metrics.x + _interitemSpacing) / (_itemSize.width + _interitemSpacing);
+    CGFloat column = (x - _metrics.x + _interitemSpacing) / [self distanceBetweenColumns];
     
     return floorf(column);
 }
@@ -159,7 +170,7 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
 
 - (NSInteger)lastColumnInRect:(CGRect)rect {
     CGFloat x = CGRectGetMaxX(rect);
-    CGFloat column = (x - _metrics.x) / (_itemSize.width + _interitemSpacing);
+    CGFloat column = (x - _metrics.x) / [self distanceBetweenColumns];
     
     return floorf(column);
 }
@@ -168,7 +179,7 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
 - (NSInteger)firstLineInRect:(CGRect)rect {
     CGFloat lineSpacing = [self calculateLineSpacing];
     CGFloat y = CGRectGetMinY(rect);
-    CGFloat line = (y - _metrics.y + lineSpacing) / (_itemSize.height + lineSpacing);
+    CGFloat line = (y - _metrics.y + lineSpacing) / [self distanceBetweenLines];
     
     return floorf(line);
 }
@@ -179,6 +190,47 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
     CGFloat line = (y - _metrics.y) / (_itemSize.height + [self calculateLineSpacing]);
     
     return floorf(line);
+}
+
+
+- (CGFloat)distanceBetweenColumns {
+    return _itemSize.width + _interitemSpacing;
+}
+
+
+- (CGFloat)distanceBetweenLines {
+    CGFloat lineSpacing = [self calculateLineSpacing];
+
+    return _itemSize.height + lineSpacing;
+}
+
+@end
+
+
+@implementation SLTStickyLayoutItemZone (OptimizedScrolling)
+
+- (CGFloat)offsetForNearestColumnToOffset:(CGFloat)offset {
+    if (offset < _metrics.x) return _metrics.x;
+    
+    if (offset > (_metrics.x + [self calculateZoneWidth])) {
+        NSInteger lastColumn = [self lastColumnInRect:[self zoneRect]];
+        return [self xOriginForColumnNumber:lastColumn];
+    }
+
+    CGFloat distanceBetweenColumns = [self distanceBetweenColumns];
+    CGFloat addition = distanceBetweenColumns / 2;
+    CGFloat x = offset - addition;
+    CGRect rect = CGRectMake(x, _metrics.y, distanceBetweenColumns, 0);
+    CGRect intersectedRect = CGRectIntersection(rect, [self zoneRect]);
+    
+    NSInteger firstColumn = [self firstColumnInRect:intersectedRect];
+    NSInteger lastColumn = [self lastColumnInRect:intersectedRect];
+    
+    
+    CGFloat firstOffset = [self xOriginForColumnNumber:firstColumn];
+    CGFloat secontOffset = [self xOriginForColumnNumber:lastColumn];
+    
+    return nearestNumberToReferenceNumber(firstOffset, secontOffset, offset);
 }
 
 @end

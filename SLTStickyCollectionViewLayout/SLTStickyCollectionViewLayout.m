@@ -129,16 +129,115 @@
 
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForSupplementaryViewOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath {
-    
     return [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind:elementKind withIndexPath:indexPath];
 }
 
 
-// return YES to cause the collection view to requery the layout for geometry information
 - (BOOL)shouldInvalidateLayoutForBoundsChange:(CGRect)newBounds {
     return YES;
-    //    CGFloat oldWidth = self.collectionView.bounds.size.width;
-    //    return (oldWidth != newBounds.size.width);
+}
+
+//
+//- (CGPoint)targetContentOffsetForProposedContentOffset:(CGPoint)proposedContentOffset {
+//    if (!_optimizedScrolling) return proposedContentOffset;
+//    
+//    CGFloat shiftedX = proposedContentOffset.x + _sectionInset.left;
+//    
+//    NSRange indexRange = [self indexRangeOfSectionsForHorizontalOffset:shiftedX];
+//    if (NSRangeIsUndefined(indexRange)) return proposedContentOffset;
+//    
+//    BOOL indexContainsOneIndex = (0 == indexRange.length);
+//    if (indexContainsOneIndex) {
+//        SLTStickyLayoutSection *section = self.sections[indexRange.location];
+//        CGFloat xTarget = [section offsetForNearestColumnToOffset:shiftedX] - _sectionInset.left;
+//        
+//        return CGPointMake(xTarget, proposedContentOffset.y);
+//    } else {
+//        SLTStickyLayoutSection *firstSection = self.sections[indexRange.location];
+//        SLTStickyLayoutSection *secondSection = self.sections[NSMaxRange(indexRange)];
+//        
+//        CGFloat firstXTarget = [firstSection offsetForNearestColumnToOffset:shiftedX];
+//        CGFloat secondXTarget = [secondSection offsetForNearestColumnToOffset:shiftedX];
+//        
+//        CGFloat xTarget = nearestNumberToReferenceNumber(firstXTarget, secondXTarget, shiftedX) - _sectionInset.left;
+//        
+//        return CGPointMake(xTarget, proposedContentOffset.y);
+//    }
+//    
+//    return proposedContentOffset;
+//}
+
+
+- (CGPoint)targetContentOffsetForProposedContentOffset:(CGPoint)proposedContentOffset withScrollingVelocity:(CGPoint)velocity {
+    if (!_optimizedScrolling) return proposedContentOffset;
+    
+    CGFloat shiftedX = proposedContentOffset.x + _sectionInset.left;
+    
+    NSRange indexRange = [self indexRangeOfSectionsForHorizontalOffset:shiftedX];
+    if (NSRangeIsUndefined(indexRange)) return proposedContentOffset;
+    
+    BOOL indexContainsOneIndex = (0 == indexRange.length);
+    if (indexContainsOneIndex) {
+        SLTStickyLayoutSection *section = self.sections[indexRange.location];
+        CGFloat xTarget = [section offsetForNearestColumnToOffset:shiftedX] - _sectionInset.left;
+        
+        return CGPointMake(xTarget, proposedContentOffset.y);
+    } else {
+        SLTStickyLayoutSection *firstSection = self.sections[indexRange.location];
+        SLTStickyLayoutSection *secondSection = self.sections[NSMaxRange(indexRange)];
+        
+        CGFloat firstXTarget = [firstSection offsetForNearestColumnToOffset:shiftedX];
+        CGFloat secondXTarget = [secondSection offsetForNearestColumnToOffset:shiftedX];
+        
+        CGFloat xTarget = nearestNumberToReferenceNumber(firstXTarget, secondXTarget, shiftedX) - _sectionInset.left;
+        
+        return CGPointMake(xTarget, proposedContentOffset.y);
+    }
+}
+
+
+- (NSRange)indexRangeOfSectionsForHorizontalOffset:(CGFloat)offset {
+    if (offset < [self.sections[0] metrics].x) return NSMakeRange(0, 0);
+
+    NSInteger numberOfSections = [self.collectionView numberOfSections];
+
+    if (offset > CGRectGetMaxX([[self.sections lastObject] sectionRect])) {
+        return NSMakeRange(numberOfSections - 1, 0);
+    }
+    
+    for (NSInteger index = 0; index < numberOfSections; index++) {
+        SLTStickyLayoutSection *section = self.sections[index];
+        CGRect sectionRect = [section sectionRect];
+        CGPoint pointInSection = CGPointMake(offset,section.metrics.y);
+        if (CGRectContainsPoint(sectionRect, pointInSection)) {
+            return NSMakeRange(index, 0);
+        }
+    }
+    
+    for (NSInteger index = 0; index < numberOfSections - 1; index++) {
+        SLTStickyLayoutSection *section = self.sections[index];
+        SLTStickyLayoutSection *nextSection = self.sections[index + 1];
+        
+        if (offset > section.metrics.x && offset < nextSection.metrics.x) {
+            return NSMakeRange(index, 1);
+        }
+    }
+    
+    NSLog(@"SLTStickyCollectionViewLayout BUG: Optimized scrolling might not work properly");
+    return NSRangeUndefined;
+}
+
+
+- (CGFloat)lastXOffsetThatCanBeUsedForOptimizing {
+    SLTStickyLayoutSection *lastSection = [self.sections lastObject];
+    CGRect bounds = self.collectionView.bounds;
+    CGSize size = [self.collectionView contentSize];
+    CGFloat x = CGRectGetMaxX(bounds) - size.width;
+    CGFloat shiftedX = x + _sectionInset.left;
+
+    CGFloat targetX = [lastSection offsetForNearestColumnToOffset:shiftedX];
+    if (targetX <= shiftedX) return targetX - _sectionInset.left;
+    return 0;
 }
 
 
@@ -251,7 +350,7 @@
     UIEdgeInsets insets = self.sectionInset;
     
     CGFloat lastXPosition = CGRectGetMaxX(previousSectionRect);
-    CGFloat xOrigin = lastXPosition + insets.right + self.interSectionSpacing + insets.left;
+    CGFloat xOrigin = lastXPosition + [self distanceBetweenSections];
     CGFloat yOrigin = insets.top;
     CGFloat height = collectionViewSize.height - insets.top - insets.bottom;
     
@@ -269,6 +368,11 @@
     }
     
     return [NSSet setWithSet:intersectingSections];
+}
+
+
+- (CGFloat)distanceBetweenSections {
+    return _sectionInset.right + self.interSectionSpacing + _sectionInset.left;
 }
 
 @end
