@@ -114,8 +114,33 @@ static NSInteger const SLTNumberOfSections = 10;
 }
 
 
+#pragma mark - Performance tests
+
+- (void)testScrollingPerformance {
+    [self measureBlock:^{
+        [self simulateScrolling];
+    }];
+}
+
 
 #pragma mark - Private Methods
+
+- (void)simulateScrolling {
+    CGFloat startX = 0;
+    CGFloat lastX = 9000;
+    for (CGFloat offset = startX; offset < lastX; offset+=2.) {
+        if ([self.layout shouldInvalidateLayoutForBoundsChange:CGRectMake(0, 0, 320, 176)]) {
+            [self.layout prepareLayout];
+            [self.layout layoutAttributesForElementsInRect:CGRectMake(offset, 0, 568, 568)];
+        }
+    }
+    
+    for (CGFloat offset = startX; offset < lastX; offset+=200.f) {
+        [self.layout targetContentOffsetForProposedContentOffset:CGPointMake(offset, 0.f)
+                                           withScrollingVelocity:CGPointZero];
+    }
+}
+
 
 - (UICollectionViewLayoutAttributes *)headerAttributesInArray:(NSArray *)array indexPath:(NSIndexPath *)indexPath {
     for (UICollectionViewLayoutAttributes *attributes in array) {

@@ -34,11 +34,9 @@
 - (instancetype)initWithMetrics:(SLTMetrics)metrics;
 - (void)prepareIntermediateMetrics;
 
-- (CGRect)frameForItemAtIndex:(NSInteger)index;
 - (CGFloat)sectionWidth;
 - (CGRect)sectionRect;
 
-- (NSArray *)indexPathsOfItemsInRect:(CGRect)rect;
 - (NSIndexPath *)headerIndexPath;
 - (NSIndexPath *)footerIndexPath;
 
@@ -47,6 +45,9 @@
 
 - (CGRect)headerFrameForVisibleRect:(CGRect)visibleRect;
 - (CGRect)footerFrameForVisibleRect:(CGRect)visibleRect;
+
+- (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndex:(NSInteger)index;
+- (NSArray *)layoutAttributesForItemsInRect:(CGRect)rect;
 
 @end
 

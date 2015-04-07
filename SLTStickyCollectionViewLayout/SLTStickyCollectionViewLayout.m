@@ -11,7 +11,7 @@
 
 @interface SLTStickyCollectionViewLayout ()
 @property (copy, nonatomic) NSArray *sections;
-
+@property (nonatomic) BOOL needsSectionInitialization;
 @end
 
 @implementation SLTStickyCollectionViewLayout
@@ -19,6 +19,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
+        _needsSectionInitialization = YES;
         [self setupDefaultDimensions];
     }
     return self;
@@ -34,8 +35,7 @@
 }
 
 
-- (CGRect)frameForSectionAtIndex:(NSInteger)sectionIndex {
-    if (sectionIndex < 0)                   return CGRectZero;
+- (CGRect)frameForSectionAtIndex:(NSUInteger)sectionIndex {
     if (sectionIndex >= [_sections count])  return CGRectZero;
     
     return [_sections[sectionIndex] sectionRect];
@@ -47,9 +47,16 @@
 - (void)prepareLayout {
     [super prepareLayout];
     
+    if (_needsSectionInitialization) {
+        [self initializeSections];
+    }
+}
+
+
+- (void)initializeSections {
     NSInteger numSections = [self.collectionView numberOfSections];
     
-    NSMutableArray *sections = [NSMutableArray arrayWithCapacity:numSections];
+    NSMutableArray *sections = [NSMutableArray arrayWithCapacity:(NSUInteger) numSections];
     for(NSInteger sectionNumber = 0; sectionNumber < numSections; sectionNumber++) {
         SLTMetrics metrics = (0 == sectionNumber) ? [self metricsForFirstSection] : [self metricsForSectionFollowingSection:[sections lastObject]];
         SLTStickyLayoutSection *section = [[SLTStickyLayoutSection alloc] initWithMetrics:metrics];
@@ -62,10 +69,10 @@
 
 
 - (CGSize)collectionViewContentSize {
-    SLTStickyLayoutSection *section = [self.sections lastObject];
+    SLTStickyLayoutSection *section = [_sections lastObject];
     CGRect lastSectionRect = [section sectionRect];
     
-    CGFloat width = CGRectGetMaxX(lastSectionRect) + self.sectionInset.right;
+    CGFloat width = CGRectGetMaxX(lastSectionRect) + _sectionInset.right;
     CGFloat height = self.collectionView.bounds.size.height;
     
     return CGSizeMake(width, height);
@@ -74,14 +81,11 @@
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
     NSSet *sections = [self sectionsIntersectingRect:rect];
-    NSArray *itemIndexPaths = [self indexPathsOfItemsInSections:sections intersectingRect:rect];
+    NSMutableArray *attributes = [NSMutableArray array];
     
-    NSMutableArray *itemAttributes = [NSMutableArray array];
-    for (NSIndexPath *indexPath in itemIndexPaths) {
-        [itemAttributes addObject:[self layoutAttributesForItemAtIndexPath:indexPath]];
+    for (SLTStickyLayoutSection *section in sections) {
+        [attributes addObjectsFromArray:[section layoutAttributesForItemsInRect:rect]];
     }
-    
-    NSMutableArray *attributes = [NSMutableArray arrayWithArray:itemAttributes];
     
     CGRect visibleRect = rect;
     visibleRect.origin.x = self.collectionView.contentOffset.x;
@@ -108,23 +112,10 @@
 }
 
 
-- (NSArray *)indexPathsOfItemsInSections:(NSSet *)sections intersectingRect:(CGRect)rect {
-    NSMutableArray *indexPaths = [NSMutableArray array];
-    
-    for (SLTStickyLayoutSection *section in sections) {
-        [indexPaths addObjectsFromArray:[section indexPathsOfItemsInRect:rect]];
-    }
-    
-    return [NSArray arrayWithArray:indexPaths];
-}
-
-
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
-    SLTStickyLayoutSection *section = self.sections[indexPath.section];
-    UICollectionViewLayoutAttributes *attributes = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
-    attributes.frame = [section frameForItemAtIndex:indexPath.row];
+    SLTStickyLayoutSection *section = _sections[(NSUInteger) indexPath.section];
     
-    return attributes;
+    return [section layoutAttributesForItemAtIndex:indexPath.row];
 }
 
 
@@ -134,38 +125,10 @@
 
 
 - (BOOL)shouldInvalidateLayoutForBoundsChange:(CGRect)newBounds {
+    _needsSectionInitialization = !CGRectEqualToRect(newBounds, self.collectionView.bounds);
+
     return YES;
 }
-
-//
-//- (CGPoint)targetContentOffsetForProposedContentOffset:(CGPoint)proposedContentOffset {
-//    if (!_optimizedScrolling) return proposedContentOffset;
-//    
-//    CGFloat shiftedX = proposedContentOffset.x + _sectionInset.left;
-//    
-//    NSRange indexRange = [self indexRangeOfSectionsForHorizontalOffset:shiftedX];
-//    if (NSRangeIsUndefined(indexRange)) return proposedContentOffset;
-//    
-//    BOOL indexContainsOneIndex = (0 == indexRange.length);
-//    if (indexContainsOneIndex) {
-//        SLTStickyLayoutSection *section = self.sections[indexRange.location];
-//        CGFloat xTarget = [section offsetForNearestColumnToOffset:shiftedX] - _sectionInset.left;
-//        
-//        return CGPointMake(xTarget, proposedContentOffset.y);
-//    } else {
-//        SLTStickyLayoutSection *firstSection = self.sections[indexRange.location];
-//        SLTStickyLayoutSection *secondSection = self.sections[NSMaxRange(indexRange)];
-//        
-//        CGFloat firstXTarget = [firstSection offsetForNearestColumnToOffset:shiftedX];
-//        CGFloat secondXTarget = [secondSection offsetForNearestColumnToOffset:shiftedX];
-//        
-//        CGFloat xTarget = nearestNumberToReferenceNumber(firstXTarget, secondXTarget, shiftedX) - _sectionInset.left;
-//        
-//        return CGPointMake(xTarget, proposedContentOffset.y);
-//    }
-//    
-//    return proposedContentOffset;
-//}
 
 
 - (CGPoint)targetContentOffsetForProposedContentOffset:(CGPoint)proposedContentOffset withScrollingVelocity:(CGPoint)velocity {
@@ -178,17 +141,16 @@
     
     NSRange indexRange = [self indexRangeOfSectionsForHorizontalOffset:shiftedX];
     if (NSRangeIsUndefined(indexRange)) return proposedContentOffset;
-    NSLog(@"Indexes: %@", NSStringFromRange(indexRange));
-    
+
     BOOL indexContainsOneIndex = (0 == indexRange.length);
     if (indexContainsOneIndex) {
-        SLTStickyLayoutSection *section = self.sections[indexRange.location];
+        SLTStickyLayoutSection *section = _sections[indexRange.location];
         CGFloat xTarget = [section offsetForNearestColumnToOffset:shiftedX] - _sectionInset.left;
         
         return CGPointMake(xTarget, proposedContentOffset.y);
     } else {
-        SLTStickyLayoutSection *firstSection = self.sections[indexRange.location];
-        SLTStickyLayoutSection *secondSection = self.sections[NSMaxRange(indexRange)];
+        SLTStickyLayoutSection *firstSection = _sections[indexRange.location];
+        SLTStickyLayoutSection *secondSection = _sections[NSMaxRange(indexRange)];
         
         CGFloat firstXTarget = [firstSection offsetForNearestColumnToOffset:shiftedX];
         CGFloat secondXTarget = [secondSection offsetForNearestColumnToOffset:shiftedX];
@@ -201,16 +163,16 @@
 
 
 - (NSRange)indexRangeOfSectionsForHorizontalOffset:(CGFloat)offset {
-    if (offset < [self.sections[0] metrics].x) return NSMakeRange(0, 0);
+    if (offset < [_sections[0] metrics].x) return NSMakeRange(0, 0);
 
     NSInteger numberOfSections = [self.collectionView numberOfSections];
 
-    if (offset > CGRectGetMaxX([[self.sections lastObject] sectionRect])) {
-        return NSMakeRange(numberOfSections - 1, 0);
+    if (offset > CGRectGetMaxX([[_sections lastObject] sectionRect])) {
+        return NSMakeRange((NSUInteger) (numberOfSections - 1), 0);
     }
     
-    for (NSInteger index = 0; index < numberOfSections; index++) {
-        SLTStickyLayoutSection *section = self.sections[index];
+    for (NSUInteger index = 0; index < numberOfSections; index++) {
+        SLTStickyLayoutSection *section = _sections[index];
         CGRect sectionRect = [section sectionRect];
         CGPoint pointInSection = CGPointMake(offset,section.metrics.y);
         if (CGRectContainsPoint(sectionRect, pointInSection)) {
@@ -224,9 +186,9 @@
         }
     }
     
-    for (NSInteger index = 0; index < numberOfSections - 1; index++) {
-        SLTStickyLayoutSection *section = self.sections[index];
-        SLTStickyLayoutSection *nextSection = self.sections[index + 1];
+    for (NSUInteger index = 0; index < numberOfSections - 1; index++) {
+        SLTStickyLayoutSection *section = _sections[index];
+        SLTStickyLayoutSection *nextSection = _sections[index + 1];
         
         if (offset > section.metrics.x && offset < nextSection.metrics.x) {
             return NSMakeRange(index, 1);
@@ -235,19 +197,6 @@
     
     NSLog(@"SLTStickyCollectionViewLayout BUG: Optimized scrolling might not work properly");
     return NSRangeUndefined;
-}
-
-
-- (CGFloat)lastXOffsetThatCanBeUsedForOptimizing {
-    SLTStickyLayoutSection *lastSection = [self.sections lastObject];
-    CGRect bounds = self.collectionView.bounds;
-    CGSize size = [self.collectionView contentSize];
-    CGFloat x = CGRectGetMaxX(bounds) - size.width;
-    CGFloat shiftedX = x + _sectionInset.left;
-
-    CGFloat targetX = [lastSection offsetForNearestColumnToOffset:shiftedX];
-    if (targetX <= shiftedX) return targetX - _sectionInset.left;
-    return 0;
 }
 
 
@@ -343,7 +292,7 @@
 
 - (SLTMetrics)metricsForFirstSection {
     CGSize collectionViewSize = self.collectionView.bounds.size;
-    UIEdgeInsets insets = self.sectionInset;
+    UIEdgeInsets insets = _sectionInset;
     
     CGFloat xOrigin = insets.left;
     CGFloat yOrigin = insets.top;
@@ -357,7 +306,7 @@
     CGRect previousSectionRect = [section sectionRect];
     
     CGSize collectionViewSize = self.collectionView.bounds.size;
-    UIEdgeInsets insets = self.sectionInset;
+    UIEdgeInsets insets = _sectionInset;
     
     CGFloat lastXPosition = CGRectGetMaxX(previousSectionRect);
     CGFloat xOrigin = lastXPosition + [self distanceBetweenSections];
@@ -371,7 +320,7 @@
 - (NSSet *)sectionsIntersectingRect:(CGRect)rect {
     NSMutableSet *intersectingSections = [[NSMutableSet alloc] init];
     
-    for (SLTStickyLayoutSection *section in self.sections) {
+    for (SLTStickyLayoutSection *section in _sections) {
         if (CGRectIntersectsRect([section sectionRect], rect)) {
             [intersectingSections addObject:section];
         }
@@ -382,7 +331,7 @@
 
 
 - (CGFloat)distanceBetweenSections {
-    return _sectionInset.right + self.interSectionSpacing + _sectionInset.left;
+    return _sectionInset.right + _interSectionSpacing + _sectionInset.left;
 }
 
 @end

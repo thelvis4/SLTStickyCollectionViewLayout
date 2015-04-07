@@ -83,7 +83,7 @@
 /// @note Default: (top=0.0, left=5.0, bottom=0.0, right=5.0)
 @property (nonatomic) UIEdgeInsets sectionInset;
 /**
- An additional space between sections. Ussualy the distance between sections
+ An additional space between sections. Usually the distance between sections
  is defined by section insets. This value will be used in case the distance
  should be adjusted.
  It may take positive (distance get bigger) or negative(distance get smaller)
@@ -101,6 +101,6 @@
 /// @note Default: NO
 @property (nonatomic, getter=isOptimizedScrolling) BOOL optimizedScrolling;
 
-- (CGRect)frameForSectionAtIndex:(NSInteger)sectionIndex;
+- (CGRect)frameForSectionAtIndex:(NSUInteger)sectionIndex;
 
 @end

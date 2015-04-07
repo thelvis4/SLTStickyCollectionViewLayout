@@ -17,8 +17,8 @@
 
 - (CGFloat)calculateZoneWidth;
 
-@property (assign, nonatomic) CGSize itemSize;
-@property (assign, nonatomic) NSInteger numberOfItems;
+@property (nonatomic) CGSize itemSize;
+@property (nonatomic) NSInteger numberOfItems;
 
 @property (nonatomic) CGFloat minimumLineSpacing;
 @property (nonatomic) CGFloat interitemSpacing;

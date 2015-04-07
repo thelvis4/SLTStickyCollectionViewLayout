@@ -28,21 +28,6 @@
 }
 
 
-- (CGRect)frameForItemAtIndex:(NSInteger)index {
-    return [_itemZone frameForItemAtIndex:index];
-}
-
-
-- (CGFloat)sectionWidth {
-    return maximumFloat([_itemZone calculateZoneWidth], _headerContentWidth, _footerContentWidth);
-}
-
-
-- (CGRect)sectionRect {
-    return CGRectFromMetrics(_metrics, [self sectionWidth]);
-}
-
-
 - (void)prepareIntermediateMetrics {
     _itemZone = [[SLTStickyLayoutItemZone alloc] initWithMetrics:[self calculateItemZoneMetrics]];
     
@@ -53,8 +38,13 @@
 }
 
 
-- (NSArray *)indexPathsOfItemsInRect:(CGRect)rect {
-    return [self indexPathsForItemIndexes:[_itemZone indexesOfItemsInRect:rect]];
+- (CGFloat)sectionWidth {
+    return maximumFloat([_itemZone calculateZoneWidth], _headerContentWidth, _footerContentWidth);
+}
+
+
+- (CGRect)sectionRect {
+    return CGRectFromMetrics(_metrics, [self sectionWidth]);
 }
 
 
@@ -69,18 +59,12 @@
 
 
 - (BOOL)headerIsVisibleInRect:(CGRect)rect {
-    if (_headerHeight <= 0.f) return NO;
-    if (![self headerIntersectsRect:rect]) return NO;
-    
-    return YES;
+    return _headerHeight > 0.f && [self headerIntersectsRect:rect];
 }
 
 
 - (BOOL)footerIsVisibleInRect:(CGRect)rect {
-    if (_footerHeight <= 0.f) return NO;
-    if (![self footerIntersectsRect:rect]) return NO;
-    
-    return YES;
+    return _footerHeight > 0.f && [self footerIntersectsRect:rect];
 }
 
 
@@ -93,34 +77,10 @@
     
     BOOL headerShouldStickToRightMargin = (exceedingSpace > 0.f);
     if (headerShouldStickToRightMargin) {
-        return [self rectForHeaderAllignedToRight];
+        return [self rectForHeaderAlignedToRight];
     } else {
         return CGRectFromRectWithX([self initialHeaderContentRect], headerXPosition);
     }
-}
-
-
-- (CGFloat)headerXPositionForVisibleRect:(CGRect)visibleRect {
-    BOOL headerViewSticksToSectionMargin = (CGRectGetMinX(visibleRect) <= _metrics.x - _headerInset);
-    if (headerViewSticksToSectionMargin) {
-        return _metrics.x;
-    } else {
-        return CGRectGetMinX(visibleRect) + _headerInset;
-    }
-}
-
-
-- (CGRect)rectForHeaderAllignedToRight {
-    CGFloat shiftingDistance = [self sectionWidth] - _headerContentWidth;
-    
-    return CGRectOffset([self initialHeaderContentRect], shiftingDistance, 0.f);
-}
-
-
-- (CGRect)rectForFooterAllignedToRight {
-    CGFloat shiftingDistance = [self sectionWidth] - _footerContentWidth;
-    
-    return CGRectOffset([self initialFooterContentRect], shiftingDistance, 0.f);
 }
 
 
@@ -134,41 +94,35 @@
     BOOL footerShouldStickToRightMargin = (exceedingSpace > 0.f);
     
     if (footerShouldStickToRightMargin) {
-        return [self rectForFooterAllignedToRight];
+        return [self rectForFooterAlignedToRight];
     } else {
         return CGRectFromRectWithX([self initialFooterContentRect], footerXPosition);
     }
 }
 
 
-- (BOOL)headerIntersectsRect:(CGRect)rect {
-    return CGRectIntersectsRect(rect, [self headerRect]);
+- (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndex:(NSInteger)index {
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:index inSection:_sectionNumber];
+    UICollectionViewLayoutAttributes *attributes = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
+    attributes.frame = [_itemZone frameForItemAtIndex:index];
+    return attributes;
 }
 
 
-- (BOOL)footerIntersectsRect:(CGRect)rect {
-    return CGRectIntersectsRect(rect, [self footerRect]);
-}
-
-
-- (BOOL)sectionIntersectsRect:(CGRect)rect {
-    return CGRectIntersectsRect(rect, [self sectionRect]);
-}
-
-
-#pragma mark - Private Methds
-
-- (NSArray *)indexPathsForItemIndexes:(NSArray *)indexes {
-    NSMutableArray *indexPaths = [NSMutableArray arrayWithCapacity:[indexes count]];
+- (NSArray *)layoutAttributesForItemsInRect:(CGRect)rect {
+     NSArray *indexes = [_itemZone indexesOfItemsInRect:rect];
+    NSMutableArray *attributesArray = [NSMutableArray arrayWithCapacity:[indexes count]];
     
     for (NSNumber *index in indexes) {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[index integerValue] inSection:_sectionNumber];
-        [indexPaths addObject:indexPath];
+        [attributesArray addObject:[self layoutAttributesForItemAtIndex:[index integerValue]]];
     }
     
-    return [NSArray arrayWithArray:indexPaths];
+    return [NSArray arrayWithArray:attributesArray];
+
 }
 
+
+#pragma mark - Private Methods
 
 - (SLTMetrics)calculateItemZoneMetrics {
     SLTMetrics metrics = _metrics;
@@ -186,6 +140,40 @@
     }
     
     return  metrics;
+}
+
+
+- (BOOL)headerIntersectsRect:(CGRect)rect {
+    return CGRectIntersectsRect(rect, [self headerRect]);
+}
+
+
+- (BOOL)footerIntersectsRect:(CGRect)rect {
+    return CGRectIntersectsRect(rect, [self footerRect]);
+}
+
+
+- (CGFloat)headerXPositionForVisibleRect:(CGRect)visibleRect {
+    BOOL headerViewSticksToSectionMargin = (CGRectGetMinX(visibleRect) <= _metrics.x - _headerInset);
+    if (headerViewSticksToSectionMargin) {
+        return _metrics.x;
+    } else {
+        return CGRectGetMinX(visibleRect) + _headerInset;
+    }
+}
+
+
+- (CGRect)rectForHeaderAlignedToRight {
+    CGFloat shiftingDistance = [self sectionWidth] - _headerContentWidth;
+    
+    return CGRectOffset([self initialHeaderContentRect], shiftingDistance, 0.f);
+}
+
+
+- (CGRect)rectForFooterAlignedToRight {
+    CGFloat shiftingDistance = [self sectionWidth] - _footerContentWidth;
+    
+    return CGRectOffset([self initialFooterContentRect], shiftingDistance, 0.f);
 }
 
 
@@ -225,7 +213,7 @@
 @implementation SLTStickyLayoutSection (OptimizedScrolling)
 
 - (CGFloat)offsetForNearestColumnToOffset:(CGFloat)offset {
-    return [self.itemZone offsetForNearestColumnToOffset:offset];
+    return [_itemZone offsetForNearestColumnToOffset:offset];
 }
 
 @end

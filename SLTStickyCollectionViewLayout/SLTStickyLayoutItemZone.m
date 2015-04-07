@@ -26,10 +26,15 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
     return (position1.column == position2.column) && (position1.line == position2.line);
 }
 
+static NSInteger const SLTUndefinedInteger = -INFINITY;
+
 @interface SLTStickyLayoutItemZone ()
 @property (assign, nonatomic) SLTMetrics metrics;
 
+@property (nonatomic) NSInteger numberOfLines;
+
 @end
+
 
 @implementation SLTStickyLayoutItemZone
 
@@ -37,6 +42,7 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
     self = [super init];
     if (self) {
         _metrics = metrics;
+        _numberOfLines = SLTUndefinedInteger;
     }
     
     return self;
@@ -71,6 +77,17 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
 }
 
 
+#pragma mark - Caching values
+
+- (NSInteger)numberOfLines {
+    if (_numberOfLines == SLTUndefinedInteger) {
+        _numberOfLines = [self calculateNumberOfLines];
+    }
+    
+    return _numberOfLines;
+}
+
+
 #pragma mark - Private Methods
 
 - (Position)positionForItemAtIndex:(NSInteger)index {
@@ -98,16 +115,16 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
 - (NSInteger)indexForPosition:(Position)position {
     if (PositionIsEqualToPosition(position, PositionMake(0, 0))) return 0;
     
-    return position.column * [self numberOfLines] + position.line;
+    return position.column * self.numberOfLines + position.line;
 }
 
 
 - (CGFloat)calculateLineSpacing {
     NSInteger numberOfLines = [self numberOfLines];
     if (1 == numberOfLines) return 0.0;
-    
-    CGFloat spaceOcupiedByItems = numberOfLines * _itemSize.height;
-    CGFloat totalLineSpacing = _metrics.height - spaceOcupiedByItems;
+
+    CGFloat spaceOccupiedByItems = numberOfLines * _itemSize.height;
+    CGFloat totalLineSpacing = _metrics.height - spaceOccupiedByItems;
     
     NSInteger numberOfSpaces = numberOfLines - 1;
     
@@ -115,15 +132,13 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
 }
 
 
-- (NSInteger)numberOfLines {
-    return floorf((_metrics.height + _minimumLineSpacing) / (_itemSize.height + _minimumLineSpacing));
+- (NSInteger)calculateNumberOfLines {
+    return (NSInteger) floorf((_metrics.height + _minimumLineSpacing) / (_itemSize.height + _minimumLineSpacing));
 }
 
 
 - (NSInteger)numberOfColumns {
-    NSInteger numberOfLines = [self numberOfLines];
-    
-    return ceilf((CGFloat)self.numberOfItems / (CGFloat)numberOfLines);
+    return (NSInteger) ceilf((CGFloat)_numberOfItems / (CGFloat)self.numberOfLines);
 }
 
 
@@ -140,7 +155,7 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
         for (NSInteger column = firstColumn; column <= lastColumn; column++) {
             Position position = PositionMake(line, column);
             NSInteger index = [self indexForPosition:position];
-            if (index < self.numberOfItems) {
+            if (index < _numberOfItems) {
                 [indexes addObject:@(index)];
             }
         }
@@ -164,7 +179,7 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
     CGFloat x = CGRectGetMinX(rect);
     CGFloat column = (x - _metrics.x + _interitemSpacing) / [self distanceBetweenColumns];
     
-    return floorf(column);
+    return (NSInteger) floorf(column);
 }
 
 
@@ -173,7 +188,7 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
     CGFloat column = (x - _metrics.x) / [self distanceBetweenColumns];
     NSInteger numberOfColumns = [self numberOfColumns];
 
-    return (column >= numberOfColumns) ? (numberOfColumns - 1) : floorf(column);
+    return (NSInteger)((column >= numberOfColumns) ? (numberOfColumns - 1) : floorf(column));
 }
 
 
@@ -182,7 +197,7 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
     CGFloat y = CGRectGetMinY(rect);
     CGFloat line = (y - _metrics.y + lineSpacing) / [self distanceBetweenLines];
     
-    return floorf(line);
+    return (NSInteger) floorf(line);
 }
 
 
@@ -190,7 +205,7 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
     CGFloat y = CGRectGetMaxY(rect);
     CGFloat line = (y - _metrics.y) / (_itemSize.height + [self calculateLineSpacing]);
     
-    return floorf(line);
+    return (NSInteger) floorf(line);
 }
 
 
@@ -230,9 +245,9 @@ BOOL PositionIsEqualToPosition(Position position1, Position position2) {
     
     
     CGFloat firstOffset = [self xOriginForColumnNumber:firstColumn];
-    CGFloat secontOffset = [self xOriginForColumnNumber:lastColumn];
+    CGFloat secondOffset = [self xOriginForColumnNumber:lastColumn];
     
-    return nearestNumberToReferenceNumber(firstOffset, secontOffset, offset);
+    return nearestNumberToReferenceNumber(firstOffset, secondOffset, offset);
 }
 
 @end

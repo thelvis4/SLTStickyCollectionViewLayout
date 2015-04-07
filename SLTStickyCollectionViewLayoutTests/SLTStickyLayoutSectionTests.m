@@ -80,7 +80,8 @@
     section.footerContentWidth = 120.f;
     [section prepareIntermediateMetrics];
     
-    CGRect itemFrame = [section frameForItemAtIndex:6];
+    UICollectionViewLayoutAttributes *attributes = [section layoutAttributesForItemAtIndex:6];
+    CGRect itemFrame = attributes.frame;
     CGRect expectedFrame = CGRectMake(35, 30, 30, 10);
     XCTAssertTrue(CGRectEqualToRect(itemFrame, expectedFrame), @"The Item frame is not calculated correctly");
 }
