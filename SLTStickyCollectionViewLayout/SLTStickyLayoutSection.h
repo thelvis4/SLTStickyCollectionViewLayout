@@ -10,7 +10,7 @@
 #import "SLTMetrics.h"
 
 @interface SLTStickyLayoutSection : NSObject
-@property (assign, nonatomic) NSInteger sectionNumber;
+@property (assign, nonatomic) NSInteger sectionIndex;
 
 @property (assign, nonatomic) NSInteger numberOfItems;
 @property (assign, nonatomic) CGSize itemSize;
@@ -37,17 +37,13 @@
 - (CGFloat)sectionWidth;
 - (CGRect)sectionRect;
 
-- (NSIndexPath *)headerIndexPath;
-- (NSIndexPath *)footerIndexPath;
+- (BOOL)hasHeaderInRect:(CGRect)rect;
+- (BOOL)hasFooterInRect:(CGRect)rect;
 
-- (BOOL)headerIsVisibleInRect:(CGRect)rect;
-- (BOOL)footerIsVisibleInRect:(CGRect)rect;
-
-- (CGRect)headerFrameForVisibleRect:(CGRect)visibleRect;
-- (CGRect)footerFrameForVisibleRect:(CGRect)visibleRect;
-
-- (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndex:(NSInteger)index;
 - (NSArray *)layoutAttributesForItemsInRect:(CGRect)rect;
+- (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndex:(NSInteger)index;
+- (UICollectionViewLayoutAttributes *)layoutAttributesForHeaderInRect:(CGRect)rect;
+- (UICollectionViewLayoutAttributes *)layoutAttributesForFooterInRect:(CGRect)rect;
 
 @end
 

@@ -113,6 +113,15 @@ static NSInteger const SLTNumberOfSections = 10;
                                     expectedOffset:proposedOffset];
 }
 
+//
+//- (void)testFrameForSection {
+//    CGRect firstSectionFrame = [self.layout frameForSectionAtIndex:0];
+//    XCTAssert(CGRectEqualToRect(firstSectionFrame, CGRectMake(0.f, 0.f, 445.f, 174.f)));
+//    
+//    CGRect thirdSectionFrame = [self.layout frameForSectionAtIndex:3];
+//    XCTAssert(CGRectEqualToRect(thirdSectionFrame, CGRectMake(6945.f, 0.f, 820.f, 174.f)));
+//}
+//
 
 #pragma mark - Performance tests
 
@@ -122,7 +131,7 @@ static NSInteger const SLTNumberOfSections = 10;
     }];
 }
 
-
+    
 #pragma mark - Private Methods
 
 - (void)simulateScrolling {

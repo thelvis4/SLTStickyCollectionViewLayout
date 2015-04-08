@@ -13,8 +13,6 @@
 - (instancetype)initWithMetrics:(SLTMetrics)metrics;
 
 - (CGRect)frameForItemAtIndex:(NSInteger)index;
-- (NSArray *)indexesOfItemsInRect:(CGRect)rect;
-
 - (CGFloat)calculateZoneWidth;
 
 @property (nonatomic) CGSize itemSize;

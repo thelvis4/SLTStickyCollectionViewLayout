@@ -59,7 +59,7 @@ CGFloat maximumFloat(CGFloat first, CGFloat second, CGFloat third) {
 }
 
 
-CGFloat nearestNumberToReferenceNumber(CGFloat a, CGFloat b, CGFloat referenceNumber) {
+CGFloat SLTNearestNumberToReferenceNumber(CGFloat a, CGFloat b, CGFloat referenceNumber) {
     return (ABS(referenceNumber - b) < ABS(referenceNumber - a)) ? b : a;
 }
 
@@ -70,3 +70,11 @@ const NSRange NSRangeUndefined = {INFINITY,0};
 BOOL NSRangeIsUndefined(NSRange range) {
     return NSEqualRanges(range, NSRangeUndefined);
 }
+
+@implementation NSArray (Additions)
+
+- (BOOL)containsObjectAtIndex:(NSUInteger)index {
+    return (index < [self count]);
+}
+
+@end

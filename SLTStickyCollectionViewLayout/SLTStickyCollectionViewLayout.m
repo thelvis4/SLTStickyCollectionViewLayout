@@ -10,7 +10,7 @@
 #import "SLTStickyLayoutSection.h"
 
 @interface SLTStickyCollectionViewLayout ()
-@property (copy, nonatomic) NSArray *sections;
+@property (nonatomic) NSMutableArray *sections;
 @property (nonatomic) BOOL needsSectionInitialization;
 @end
 
@@ -29,6 +29,7 @@
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
+        _needsSectionInitialization = YES;
         [self setupDefaultDimensions];
     }
     return self;
@@ -36,7 +37,7 @@
 
 
 - (CGRect)frameForSectionAtIndex:(NSUInteger)sectionIndex {
-    if (sectionIndex >= [_sections count])  return CGRectZero;
+    if (![_sections containsObjectAtIndex:sectionIndex]) return CGRectZero;
     
     return [_sections[sectionIndex] sectionRect];
 }
@@ -53,58 +54,28 @@
 }
 
 
-- (void)initializeSections {
-    NSInteger numSections = [self.collectionView numberOfSections];
-    
-    NSMutableArray *sections = [NSMutableArray arrayWithCapacity:(NSUInteger) numSections];
-    for(NSInteger sectionNumber = 0; sectionNumber < numSections; sectionNumber++) {
-        SLTMetrics metrics = (0 == sectionNumber) ? [self metricsForFirstSection] : [self metricsForSectionFollowingSection:[sections lastObject]];
-        SLTStickyLayoutSection *section = [[SLTStickyLayoutSection alloc] initWithMetrics:metrics];
-        [self configureSection:section sectionNumber:sectionNumber];
-        [sections addObject:section];
-    }
-    
-    self.sections = sections;
-}
-
-
 - (CGSize)collectionViewContentSize {
-    SLTStickyLayoutSection *section = [_sections lastObject];
-    CGRect lastSectionRect = [section sectionRect];
-    
-    CGFloat width = CGRectGetMaxX(lastSectionRect) + _sectionInset.right;
-    CGFloat height = self.collectionView.bounds.size.height;
+    CGFloat width = [self lastXPosition] + self.sectionInset.right;
+    CGFloat height = CGRectGetHeight(self.collectionView.bounds);
     
     return CGSizeMake(width, height);
 }
 
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
-    NSSet *sections = [self sectionsIntersectingRect:rect];
-    NSMutableArray *attributes = [NSMutableArray array];
-    
+    NSArray *sections = [self sectionsIntersectingRect:rect];
+    NSMutableArray *attributes = [NSMutableArray arrayWithCapacity:300];
+    CGRect rectForSuplimentaryViews = [self rectWithVisibleLeftEdgeForRect:rect];
+
     for (SLTStickyLayoutSection *section in sections) {
         [attributes addObjectsFromArray:[section layoutAttributesForItemsInRect:rect]];
-    }
-    
-    CGRect visibleRect = rect;
-    visibleRect.origin.x = self.collectionView.contentOffset.x;
-    
-    for (SLTStickyLayoutSection *section in sections) {
-        if ([section headerIsVisibleInRect:visibleRect]) {
-            CGRect headerRect = [section headerFrameForVisibleRect:visibleRect];
-            UICollectionViewLayoutAttributes *headerAttributes = [self layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionHeader
-                                                                                                      atIndexPath:[section headerIndexPath]];
-            [headerAttributes setFrame:headerRect];
-            [attributes addObject:headerAttributes];
+
+        if ([section hasHeaderInRect:rectForSuplimentaryViews]) {
+            [attributes addObject:[section layoutAttributesForHeaderInRect:rectForSuplimentaryViews]];
         }
         
-        if ([section footerIsVisibleInRect:visibleRect]) {
-            CGRect footerRect = [section footerFrameForVisibleRect:visibleRect];
-            UICollectionViewLayoutAttributes *footerAttributes = [self layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionFooter
-                                                                                                      atIndexPath:[section footerIndexPath]];
-            [footerAttributes setFrame:footerRect];
-            [attributes addObject:footerAttributes];
+        if ([section hasFooterInRect:rectForSuplimentaryViews]) {
+            [attributes addObject:[section layoutAttributesForFooterInRect:rectForSuplimentaryViews]];
         }
     }
     
@@ -119,14 +90,9 @@
 }
 
 
-- (UICollectionViewLayoutAttributes *)layoutAttributesForSupplementaryViewOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath {
-    return [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind:elementKind withIndexPath:indexPath];
-}
-
-
 - (BOOL)shouldInvalidateLayoutForBoundsChange:(CGRect)newBounds {
-    _needsSectionInitialization = !CGRectEqualToRect(newBounds, self.collectionView.bounds);
-
+    _needsSectionInitialization = !CGSizeEqualToSize(newBounds.size, self.collectionView.bounds.size);
+    
     return YES;
 }
 
@@ -155,18 +121,139 @@
         CGFloat firstXTarget = [firstSection offsetForNearestColumnToOffset:shiftedX];
         CGFloat secondXTarget = [secondSection offsetForNearestColumnToOffset:shiftedX];
         
-        CGFloat xTarget = nearestNumberToReferenceNumber(firstXTarget, secondXTarget, shiftedX) - _sectionInset.left;
+        CGFloat xTarget = SLTNearestNumberToReferenceNumber(firstXTarget, secondXTarget, shiftedX) - _sectionInset.left;
         
         return CGPointMake(xTarget, proposedContentOffset.y);
     }
 }
 
 
+#pragma mark - Private Methods
+
+- (void)setupDefaultDimensions {
+    _itemSize = CGSizeMake(50.f, 50.f);
+    _minimumLineSpacing = 10.f;
+    _interitemSpacing = 10.f;
+    
+    _headerReferenceHeight = 0.f;
+    _footerReferenceHeight = 0.f;
+    
+    _headerReferenceContentWidth = 0.f;
+    _footerReferenceContentWidth = 0.f;
+    
+    _sectionInset = UIEdgeInsetsMake(0.f, 5.f, 0.f, 5.f);
+    _interSectionSpacing = 0.f;
+    
+    _distanceBetweenHeaderAndItems = 0.f;
+    _distanceBetweenFooterAndItems = 0.f;
+}
+
+
+- (void)initializeSections {
+    NSInteger numberOfSections = [self.collectionView numberOfSections];
+    
+    _sections = [NSMutableArray arrayWithCapacity:(NSUInteger)numberOfSections];
+    
+    for(NSInteger index = 0; index < numberOfSections; index++) {
+        SLTMetrics metrics = [self metricsForSectionAtIndex:index];
+        SLTStickyLayoutSection *section = [self instantiateSectionAtIndex:index metrics:metrics];
+        [_sections addObject:section];
+    }
+}
+
+
+- (SLTStickyLayoutSection *)instantiateSectionAtIndex:(NSInteger)index metrics:(SLTMetrics)metrics {
+    SLTStickyLayoutSection *section = [[SLTStickyLayoutSection alloc] initWithMetrics:metrics];
+    section.sectionIndex = index;
+    section.itemSize = _itemSize;
+    section.minimumLineSpacing = _minimumLineSpacing;
+    section.minimumInteritemSpacing = _interitemSpacing;
+    section.distanceBetweenHeaderAndCells = _distanceBetweenHeaderAndItems;
+    section.distanceBetweenFooterAndCells = _distanceBetweenFooterAndItems;
+    section.headerInset = _sectionInset.left;
+
+    section.numberOfItems = [self.collectionView numberOfItemsInSection:index];
+
+    section.headerHeight = [self headerHeightForSectionAtIndex:index];
+    section.footerHeight = [self footerHeightForSectionAtIndex:index];
+    section.headerContentWidth = [self headerContentWidthForSectionAtIndex:index];
+    section.footerContentWidth = [self footerContentWidthForSectionAtIndex:index];
+    [section prepareIntermediateMetrics];
+    
+    return section;
+}
+
+
+- (CGFloat)headerHeightForSectionAtIndex:(NSInteger)sectionIndex {
+    SEL selector = @selector(collectionView:layout:headerHeightInSection:);
+    
+    if ([self.delegate respondsToSelector:selector]) {
+        return [self.delegate collectionView:self.collectionView
+                                      layout:self
+                       headerHeightInSection:sectionIndex];
+    } else {
+        return _headerReferenceHeight;
+    }
+}
+
+
+- (CGFloat)footerHeightForSectionAtIndex:(NSInteger)sectionIndex {
+    SEL selector = @selector(collectionView:layout:footerHeightInSection:);
+    
+    if ([self.delegate respondsToSelector:selector]) {
+        return [self.delegate collectionView:self.collectionView
+                                      layout:self
+                       footerHeightInSection:sectionIndex];
+    } else {
+        return _footerReferenceHeight;
+    }
+}
+
+
+- (CGFloat)headerContentWidthForSectionAtIndex:(NSInteger)sectionIndex {
+    SEL selector = @selector(collectionView:layout:headerContentWidthInSection:);
+    
+    if ([self.delegate respondsToSelector:selector]) {
+        return [self.delegate collectionView:self.collectionView
+                                      layout:self
+                 headerContentWidthInSection:sectionIndex];
+    } else {
+        return _headerReferenceContentWidth;
+    }
+}
+
+
+- (CGFloat)footerContentWidthForSectionAtIndex:(NSInteger)sectionIndex {
+    SEL selector = @selector(collectionView:layout:footerContentWidthInSection:);
+    
+    if ([self.delegate respondsToSelector:selector]) {
+        return [self.delegate collectionView:self.collectionView
+                                      layout:self
+                 footerContentWidthInSection:sectionIndex];
+    } else {
+        return _footerReferenceContentWidth;
+    }
+}
+
+
+- (NSArray *)sectionsIntersectingRect:(CGRect)rect {
+    NSMutableArray *intersectingSections = [NSMutableArray array];
+    
+    for (SLTStickyLayoutSection *section in _sections) {
+        if (CGRectIntersectsRect([section sectionRect], rect)) {
+            [intersectingSections addObject:section];
+        }
+    }
+    
+    return intersectingSections;
+}
+
+
 - (NSRange)indexRangeOfSectionsForHorizontalOffset:(CGFloat)offset {
     if (offset < [_sections[0] metrics].x) return NSMakeRange(0, 0);
-
+    
     NSInteger numberOfSections = [self.collectionView numberOfSections];
-
+    
     if (offset > CGRectGetMaxX([[_sections lastObject] sectionRect])) {
         return NSMakeRange((NSUInteger) (numberOfSections - 1), 0);
     }
@@ -200,101 +287,18 @@
 }
 
 
-#pragma mark - Private Methods
-
-- (void)setupDefaultDimensions {
-    _itemSize = CGSizeMake(50.f, 50.f);
-    _minimumLineSpacing = 10.f;
-    _interitemSpacing = 10.f;
-    
-    _headerReferenceHeight = 0.f;
-    _footerReferenceHeight = 0.f;
-    
-    _headerReferenceContentWidth = 0.f;
-    _footerReferenceContentWidth = 0.f;
-    
-    _sectionInset = UIEdgeInsetsMake(0.f, 5.f, 0.f, 5.f);
-    _interSectionSpacing = 0.f;
-    
-    _distanceBetweenHeaderAndItems = 0.f;
-    _distanceBetweenFooterAndItems = 0.f;
+- (CGRect)rectWithVisibleLeftEdgeForRect:(CGRect)rect {
+    return CGRectFromRectWithX(rect, self.collectionView.contentOffset.x);
 }
 
 
-- (void)configureSection:(SLTStickyLayoutSection *)section sectionNumber:(NSInteger)sectionNumber {
-    section.sectionNumber = sectionNumber;
-    section.numberOfItems = [self.collectionView numberOfItemsInSection:sectionNumber];
-    section.itemSize = _itemSize;
-    section.minimumLineSpacing = _minimumLineSpacing;
-    section.minimumInteritemSpacing = _interitemSpacing;
-    section.distanceBetweenHeaderAndCells = _distanceBetweenHeaderAndItems;
-    section.distanceBetweenFooterAndCells = _distanceBetweenFooterAndItems;
-    section.headerHeight = [self headerHeightForSectionWithSectionNumber:sectionNumber];
-    section.footerHeight = [self footerHeightForSectionWithSectionNumber:sectionNumber];
-    section.headerContentWidth = [self headerContentWidthForSectionWithSectionNumber:sectionNumber];
-    section.footerContentWidth = [self footerContentWidthForSectionWithSectionNumber:sectionNumber];
-    section.headerInset = _sectionInset.left;
-    [section prepareIntermediateMetrics];
-}
+#pragma mark - Metrics
 
-
-- (CGFloat)headerHeightForSectionWithSectionNumber:(NSInteger)sectionNumber {
-    SEL selector = @selector(collectionView:layout:headerHeightInSection:);
-    
-    if ([self.delegate respondsToSelector:selector]) {
-        return [self.delegate collectionView:self.collectionView
-                                      layout:self
-                       headerHeightInSection:sectionNumber];
-    } else {
-        return _headerReferenceHeight;
-    }
-}
-
-
-- (CGFloat)footerHeightForSectionWithSectionNumber:(NSInteger)sectionNumber {
-    SEL selector = @selector(collectionView:layout:footerHeightInSection:);
-    
-    if ([self.delegate respondsToSelector:selector]) {
-        return [self.delegate collectionView:self.collectionView
-                                      layout:self
-                       footerHeightInSection:sectionNumber];
-    } else {
-        return _footerReferenceHeight;
-    }
-}
-
-
-- (CGFloat)headerContentWidthForSectionWithSectionNumber:(NSInteger)sectionNumber {
-    SEL selector = @selector(collectionView:layout:headerContentWidthInSection:);
-    
-    if ([self.delegate respondsToSelector:selector]) {
-        return [self.delegate collectionView:self.collectionView
-                                      layout:self
-                 headerContentWidthInSection:sectionNumber];
-    } else {
-        return _headerReferenceContentWidth;
-    }
-}
-
-
-- (CGFloat)footerContentWidthForSectionWithSectionNumber:(NSInteger)sectionNumber {
-    SEL selector = @selector(collectionView:layout:footerContentWidthInSection:);
-    
-    if ([self.delegate respondsToSelector:selector]) {
-        return [self.delegate collectionView:self.collectionView
-                                      layout:self
-                 footerContentWidthInSection:sectionNumber];
-    } else {
-        return _footerReferenceContentWidth;
-    }
-}
-
-
-- (SLTMetrics)metricsForFirstSection {
+- (SLTMetrics)metricsForSectionAtIndex:(NSInteger)sectionIndex {
     CGSize collectionViewSize = self.collectionView.bounds.size;
     UIEdgeInsets insets = _sectionInset;
     
-    CGFloat xOrigin = insets.left;
+    CGFloat xOrigin = [self xOriginForSectionAtIndex:sectionIndex];
     CGFloat yOrigin = insets.top;
     CGFloat height = collectionViewSize.height - insets.top - insets.bottom;
     
@@ -302,31 +306,20 @@
 }
 
 
-- (SLTMetrics)metricsForSectionFollowingSection:(SLTStickyLayoutSection *)section {
+- (CGFloat)xOriginForSectionAtIndex:(NSInteger)sectionIndex {
+    if (0 == sectionIndex) {
+        return _sectionInset.left;
+    } else {
+        return [self lastXPosition] + [self distanceBetweenSections];
+    }
+}
+
+
+- (CGFloat)lastXPosition {
+    SLTStickyLayoutSection *section = [_sections lastObject];
     CGRect previousSectionRect = [section sectionRect];
     
-    CGSize collectionViewSize = self.collectionView.bounds.size;
-    UIEdgeInsets insets = _sectionInset;
-    
-    CGFloat lastXPosition = CGRectGetMaxX(previousSectionRect);
-    CGFloat xOrigin = lastXPosition + [self distanceBetweenSections];
-    CGFloat yOrigin = insets.top;
-    CGFloat height = collectionViewSize.height - insets.top - insets.bottom;
-    
-    return SLTMetricsMake(xOrigin, yOrigin, height);
-}
-
-
-- (NSSet *)sectionsIntersectingRect:(CGRect)rect {
-    NSMutableSet *intersectingSections = [[NSMutableSet alloc] init];
-    
-    for (SLTStickyLayoutSection *section in _sections) {
-        if (CGRectIntersectsRect([section sectionRect], rect)) {
-            [intersectingSections addObject:section];
-        }
-    }
-    
-    return [NSSet setWithSet:intersectingSections];
+    return CGRectGetMaxX(previousSectionRect);
 }
 
 

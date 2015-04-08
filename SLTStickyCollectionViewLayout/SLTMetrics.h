@@ -24,7 +24,12 @@ CGRect CGRectFromMetrics(SLTMetrics metrics, CGFloat width);
 CGRect CGRectFromRectWithX(CGRect rect, CGFloat x);
 CGFloat maximumFloat(CGFloat first, CGFloat second, CGFloat third);
 
-CGFloat nearestNumberToReferenceNumber(CGFloat a, CGFloat b, CGFloat referenceNumber);
+CGFloat SLTNearestNumberToReferenceNumber(CGFloat a, CGFloat b, CGFloat referenceNumber);
 
 extern const NSRange NSRangeUndefined;
 BOOL NSRangeIsUndefined(NSRange range);
+
+@interface NSArray (Additions)
+- (BOOL)containsObjectAtIndex:(NSUInteger)index;
+
+@end

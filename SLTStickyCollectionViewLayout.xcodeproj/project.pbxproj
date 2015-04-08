@@ -10,14 +10,14 @@
 		A363224F1ACE91C100DC3775 /* SLTUtilitiesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A363224E1ACE91C100DC3775 /* SLTUtilitiesTests.m */; };
 		A36322511ACEC54F00DC3775 /* SLTStickyCollectionViewLayoutTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A36322501ACEC54F00DC3775 /* SLTStickyCollectionViewLayoutTests.m */; };
 		A36322611ACEC5BC00DC3775 /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A36322561ACEC5BC00DC3775 /* libOCMock.a */; };
-		A377C9811ACBE53B00DD0558 /* SLTStickyCollectionViewLayout.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = A377C9801ACBE53B00DD0558 /* SLTStickyCollectionViewLayout.h */; };
-		A377C9831ACBE53C00DD0558 /* SLTStickyCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = A377C9821ACBE53C00DD0558 /* SLTStickyCollectionViewLayout.m */; };
 		A377C9891ACBE53C00DD0558 /* libSLTStickyCollectionViewLayout.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A377C97D1ACBE53B00DD0558 /* libSLTStickyCollectionViewLayout.a */; };
-		A377C9991ACBE5FB00DD0558 /* SLTStickyLayoutSection.m in Sources */ = {isa = PBXBuildFile; fileRef = A377C9981ACBE5FB00DD0558 /* SLTStickyLayoutSection.m */; };
-		A377C99C1ACBE64200DD0558 /* SLTStickyLayoutItemZone.m in Sources */ = {isa = PBXBuildFile; fileRef = A377C99B1ACBE64200DD0558 /* SLTStickyLayoutItemZone.m */; };
 		A377C99F1ACBE6EE00DD0558 /* SLTStickyLayoutItemZoneTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A377C99D1ACBE6EE00DD0558 /* SLTStickyLayoutItemZoneTests.m */; };
 		A377C9A01ACBE6EE00DD0558 /* SLTStickyLayoutSectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A377C99E1ACBE6EE00DD0558 /* SLTStickyLayoutSectionTests.m */; };
-		A38655B51ACD43D60016FCA7 /* SLTMetrics.m in Sources */ = {isa = PBXBuildFile; fileRef = A38655B41ACD43D60016FCA7 /* SLTMetrics.m */; };
+		A3AC85B21AD583C700FDEDBC /* SLTMetrics.m in Sources */ = {isa = PBXBuildFile; fileRef = A3AC85A71AD5836400FDEDBC /* SLTMetrics.m */; };
+		A3AC85B31AD583C700FDEDBC /* SLTStickyCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = A3AC85A91AD5836400FDEDBC /* SLTStickyCollectionViewLayout.m */; };
+		A3AC85B41AD583C700FDEDBC /* SLTStickyLayoutItemZone.m in Sources */ = {isa = PBXBuildFile; fileRef = A3AC85AB1AD5836400FDEDBC /* SLTStickyLayoutItemZone.m */; };
+		A3AC85B51AD583C700FDEDBC /* SLTStickyLayoutSection.m in Sources */ = {isa = PBXBuildFile; fileRef = A3AC85AD1AD5836400FDEDBC /* SLTStickyLayoutSection.m */; };
+		A3AC85B71AD5840600FDEDBC /* SLTStickyCollectionViewLayout.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = A3AC85A81AD5836400FDEDBC /* SLTStickyCollectionViewLayout.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,7 +37,7 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
-				A377C9811ACBE53B00DD0558 /* SLTStickyCollectionViewLayout.h in CopyFiles */,
+				A3AC85B71AD5840600FDEDBC /* SLTStickyCollectionViewLayout.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -57,18 +57,18 @@
 		A363225F1ACEC5BC00DC3775 /* OCMRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMRecorder.h; sourceTree = "<group>"; };
 		A36322601ACEC5BC00DC3775 /* OCMStubRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMStubRecorder.h; sourceTree = "<group>"; };
 		A377C97D1ACBE53B00DD0558 /* libSLTStickyCollectionViewLayout.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSLTStickyCollectionViewLayout.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		A377C9801ACBE53B00DD0558 /* SLTStickyCollectionViewLayout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SLTStickyCollectionViewLayout.h; sourceTree = "<group>"; };
-		A377C9821ACBE53C00DD0558 /* SLTStickyCollectionViewLayout.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SLTStickyCollectionViewLayout.m; sourceTree = "<group>"; };
 		A377C9881ACBE53C00DD0558 /* SLTStickyCollectionViewLayoutTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SLTStickyCollectionViewLayoutTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A377C98E1ACBE53C00DD0558 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A377C9971ACBE5FB00DD0558 /* SLTStickyLayoutSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLTStickyLayoutSection.h; sourceTree = "<group>"; };
-		A377C9981ACBE5FB00DD0558 /* SLTStickyLayoutSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTStickyLayoutSection.m; sourceTree = "<group>"; };
-		A377C99A1ACBE64200DD0558 /* SLTStickyLayoutItemZone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLTStickyLayoutItemZone.h; sourceTree = "<group>"; };
-		A377C99B1ACBE64200DD0558 /* SLTStickyLayoutItemZone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTStickyLayoutItemZone.m; sourceTree = "<group>"; };
 		A377C99D1ACBE6EE00DD0558 /* SLTStickyLayoutItemZoneTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTStickyLayoutItemZoneTests.m; sourceTree = "<group>"; };
 		A377C99E1ACBE6EE00DD0558 /* SLTStickyLayoutSectionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTStickyLayoutSectionTests.m; sourceTree = "<group>"; };
-		A38655B31ACD43D60016FCA7 /* SLTMetrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLTMetrics.h; sourceTree = "<group>"; };
-		A38655B41ACD43D60016FCA7 /* SLTMetrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTMetrics.m; sourceTree = "<group>"; };
+		A3AC85A61AD5836400FDEDBC /* SLTMetrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLTMetrics.h; sourceTree = "<group>"; };
+		A3AC85A71AD5836400FDEDBC /* SLTMetrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTMetrics.m; sourceTree = "<group>"; };
+		A3AC85A81AD5836400FDEDBC /* SLTStickyCollectionViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLTStickyCollectionViewLayout.h; sourceTree = "<group>"; };
+		A3AC85A91AD5836400FDEDBC /* SLTStickyCollectionViewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTStickyCollectionViewLayout.m; sourceTree = "<group>"; };
+		A3AC85AA1AD5836400FDEDBC /* SLTStickyLayoutItemZone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLTStickyLayoutItemZone.h; sourceTree = "<group>"; };
+		A3AC85AB1AD5836400FDEDBC /* SLTStickyLayoutItemZone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTStickyLayoutItemZone.m; sourceTree = "<group>"; };
+		A3AC85AC1AD5836400FDEDBC /* SLTStickyLayoutSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLTStickyLayoutSection.h; sourceTree = "<group>"; };
+		A3AC85AD1AD5836400FDEDBC /* SLTStickyLayoutSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTStickyLayoutSection.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,7 +127,7 @@
 		A377C9741ACBE53B00DD0558 = {
 			isa = PBXGroup;
 			children = (
-				A377C97F1ACBE53B00DD0558 /* SLTStickyCollectionViewLayout */,
+				A3AC85A51AD5836400FDEDBC /* SLTStickyCollectionViewLayout */,
 				A377C98C1ACBE53C00DD0558 /* SLTStickyCollectionViewLayoutTests */,
 				A36322541ACEC5BC00DC3775 /* ExternalSources */,
 				A377C97E1ACBE53B00DD0558 /* Products */,
@@ -141,21 +141,6 @@
 				A377C9881ACBE53C00DD0558 /* SLTStickyCollectionViewLayoutTests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		A377C97F1ACBE53B00DD0558 /* SLTStickyCollectionViewLayout */ = {
-			isa = PBXGroup;
-			children = (
-				A377C9801ACBE53B00DD0558 /* SLTStickyCollectionViewLayout.h */,
-				A377C9821ACBE53C00DD0558 /* SLTStickyCollectionViewLayout.m */,
-				A377C9971ACBE5FB00DD0558 /* SLTStickyLayoutSection.h */,
-				A377C9981ACBE5FB00DD0558 /* SLTStickyLayoutSection.m */,
-				A377C99A1ACBE64200DD0558 /* SLTStickyLayoutItemZone.h */,
-				A377C99B1ACBE64200DD0558 /* SLTStickyLayoutItemZone.m */,
-				A38655B31ACD43D60016FCA7 /* SLTMetrics.h */,
-				A38655B41ACD43D60016FCA7 /* SLTMetrics.m */,
-			);
-			path = SLTStickyCollectionViewLayout;
 			sourceTree = "<group>";
 		};
 		A377C98C1ACBE53C00DD0558 /* SLTStickyCollectionViewLayoutTests */ = {
@@ -176,6 +161,21 @@
 				A377C98E1ACBE53C00DD0558 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		A3AC85A51AD5836400FDEDBC /* SLTStickyCollectionViewLayout */ = {
+			isa = PBXGroup;
+			children = (
+				A3AC85A61AD5836400FDEDBC /* SLTMetrics.h */,
+				A3AC85A71AD5836400FDEDBC /* SLTMetrics.m */,
+				A3AC85A81AD5836400FDEDBC /* SLTStickyCollectionViewLayout.h */,
+				A3AC85A91AD5836400FDEDBC /* SLTStickyCollectionViewLayout.m */,
+				A3AC85AA1AD5836400FDEDBC /* SLTStickyLayoutItemZone.h */,
+				A3AC85AB1AD5836400FDEDBC /* SLTStickyLayoutItemZone.m */,
+				A3AC85AC1AD5836400FDEDBC /* SLTStickyLayoutSection.h */,
+				A3AC85AD1AD5836400FDEDBC /* SLTStickyLayoutSection.m */,
+			);
+			path = SLTStickyCollectionViewLayout;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -283,10 +283,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A377C99C1ACBE64200DD0558 /* SLTStickyLayoutItemZone.m in Sources */,
-				A38655B51ACD43D60016FCA7 /* SLTMetrics.m in Sources */,
-				A377C9991ACBE5FB00DD0558 /* SLTStickyLayoutSection.m in Sources */,
-				A377C9831ACBE53C00DD0558 /* SLTStickyCollectionViewLayout.m in Sources */,
+				A3AC85B51AD583C700FDEDBC /* SLTStickyLayoutSection.m in Sources */,
+				A3AC85B41AD583C700FDEDBC /* SLTStickyLayoutItemZone.m in Sources */,
+				A3AC85B21AD583C700FDEDBC /* SLTMetrics.m in Sources */,
+				A3AC85B31AD583C700FDEDBC /* SLTStickyCollectionViewLayout.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -399,7 +399,7 @@
 		A377C9931ACBE53C00DD0558 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_OPTIMIZATION_LEVEL = fast;
+				GCC_OPTIMIZATION_LEVEL = 3;
 				LLVM_LTO = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";

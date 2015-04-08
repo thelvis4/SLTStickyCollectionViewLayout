@@ -86,43 +86,6 @@ CGRect CGRectMakeWithSize(CGFloat x, CGFloat y, CGSize size) {
 }
 
 
-#pragma mark - Testing indexesOfItemsInRect method
-
-- (void)testIndexOfItemsInRect {
-    SLTMetrics metrics = SLTMetricsMake(30, 65, 90);
-    SLTStickyLayoutItemZone *zone = [self itemZoneWithZoneMetrics:metrics itemSize:CGSizeMake(30, 10)];
-    zone.numberOfItems = 14;
-    
-    NSArray *indexes = [zone indexesOfItemsInRect:CGRectMake(0, 80, 60, 80)];
-    XCTAssertNotEqual([indexes count], 0, @"Item positions are not recognized correctly");
-}
-
-
-- (void)testCellIndexesInWrongRect {
-    SLTMetrics metrics = SLTMetricsMake(30, 65, 90);
-    SLTStickyLayoutItemZone *zone = [self itemZoneWithZoneMetrics:metrics itemSize:CGSizeMake(30, 10)];
-    zone.numberOfItems = 14;
-    
-    NSArray *indexes = [zone indexesOfItemsInRect:CGRectMake(0, 0, 200, 50)];
-    XCTAssertEqual([indexes count], 0, @"It should return 0 because there are no cells in given rect");
-}
-
-
-- (void)testCellIndexesAreCorrectInRect {
-    SLTMetrics metrics = SLTMetricsMake(0, 0, 90);
-    SLTStickyLayoutItemZone *zone = [self itemZoneWithZoneMetrics:metrics itemSize:CGSizeMake(20, 20)];
-    zone.numberOfItems = 11;
-    
-    NSArray *indexes = [zone indexesOfItemsInRect:CGRectMake(30, 22, 65, 49)];
-    NSSet *indexSet = [NSSet setWithArray:indexes];
-    XCTAssertEqual([indexes count], [indexSet count], @"There should not be repetitive objects");
-    
-    NSSet *expectedIndexes = [NSSet setWithArray:@[@4, @5, @7, @8, @10]];
-
-    XCTAssertTrue([indexSet isEqualToSet:expectedIndexes], @"It returned wrong indexes");
-}
-
-
 - (void)testOffsetForNearestColumn {
     [self runTestsForTestingOffsetForNearestColumnWithSectionOffset:0];
     [self runTestsForTestingOffsetForNearestColumnWithSectionOffset:20.5];

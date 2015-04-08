@@ -8,23 +8,19 @@
 
 #import "SLTStickyLayoutItemZone.h"
 
-typedef struct Position {
+typedef struct SLTPosition {
     NSInteger line;
     NSInteger column;
-} Position;
+} SLTPosition;
 
-Position PositionMake(NSInteger line, NSInteger column) {
-    Position position;
+SLTPosition SLTPositionMake(NSInteger line, NSInteger column) {
+    SLTPosition position;
     position.line = line;
     position.column = column;
     
     return position;
 }
 
-
-BOOL PositionIsEqualToPosition(Position position1, Position position2) {
-    return (position1.column == position2.column) && (position1.line == position2.line);
-}
 
 static NSInteger const SLTUndefinedInteger = -INFINITY;
 
@@ -50,7 +46,7 @@ static NSInteger const SLTUndefinedInteger = -INFINITY;
 
 
 - (CGRect)frameForItemAtIndex:(NSInteger)index {
-    Position position = [self positionForItemAtIndex:index];
+    SLTPosition position = [self positionForItemAtIndex:index];
     CGFloat xOrigin = [self xOriginForColumnNumber:position.column];
     CGFloat yOrigin = [self yOriginForLineNumber:position.line];
     
@@ -69,14 +65,6 @@ static NSInteger const SLTUndefinedInteger = -INFINITY;
 }
 
 
-- (NSArray *)indexesOfItemsInRect:(CGRect)rect {
-    CGRect intersectedRect = CGRectIntersection(rect, [self zoneRect]);
-    if (CGRectIsNull(intersectedRect)) return @[];
-    
-    return [self buildMapOfItemIndexesForRect:intersectedRect];
-}
-
-
 #pragma mark - Caching values
 
 - (NSInteger)numberOfLines {
@@ -90,15 +78,15 @@ static NSInteger const SLTUndefinedInteger = -INFINITY;
 
 #pragma mark - Private Methods
 
-- (Position)positionForItemAtIndex:(NSInteger)index {
-    if (0 == index) return PositionMake(0, 0);
+- (SLTPosition)positionForItemAtIndex:(NSInteger)index {
+    if (0 == index) return SLTPositionMake(0, 0);
     
     NSInteger numberOfLines = [self numberOfLines];
     BOOL isEnoughSpace = (numberOfLines != 0);
     NSInteger column = isEnoughSpace ? index / numberOfLines : index; // there is at least a line of items
     NSInteger line = isEnoughSpace ? index % numberOfLines : 0;
     
-    return PositionMake(line, column);
+    return SLTPositionMake(line, column);
 }
 
 
@@ -109,13 +97,6 @@ static NSInteger const SLTUndefinedInteger = -INFINITY;
 
 - (CGFloat)xOriginForColumnNumber:(NSInteger)column {
     return _metrics.x + column * [self distanceBetweenColumns];
-}
-
-
-- (NSInteger)indexForPosition:(Position)position {
-    if (PositionIsEqualToPosition(position, PositionMake(0, 0))) return 0;
-    
-    return position.column * self.numberOfLines + position.line;
 }
 
 
@@ -144,27 +125,6 @@ static NSInteger const SLTUndefinedInteger = -INFINITY;
 
 #pragma mark - Item Frames Mapping
 
-- (NSArray *)buildMapOfItemIndexesForRect:(CGRect)rect {
-    NSInteger firstLine = [self firstLineInRect:rect];
-    NSInteger lastLine = [self lastLineInRect:rect];
-    NSInteger firstColumn = [self firstColumnInRect:rect];
-    NSInteger lastColumn = [self lastColumnInRect:rect];
-    
-    NSMutableArray *indexes = [NSMutableArray array];
-    for (NSInteger line = firstLine; line <= lastLine; line++) {
-        for (NSInteger column = firstColumn; column <= lastColumn; column++) {
-            Position position = PositionMake(line, column);
-            NSInteger index = [self indexForPosition:position];
-            if (index < _numberOfItems) {
-                [indexes addObject:@(index)];
-            }
-        }
-    }
-    
-    return indexes;
-}
-
-
 - (CGRect)zoneRect {
     CGFloat x = _metrics.x;
     CGFloat y = _metrics.y;
@@ -189,23 +149,6 @@ static NSInteger const SLTUndefinedInteger = -INFINITY;
     NSInteger numberOfColumns = [self numberOfColumns];
 
     return (NSInteger)((column >= numberOfColumns) ? (numberOfColumns - 1) : floorf(column));
-}
-
-
-- (NSInteger)firstLineInRect:(CGRect)rect {
-    CGFloat lineSpacing = [self calculateLineSpacing];
-    CGFloat y = CGRectGetMinY(rect);
-    CGFloat line = (y - _metrics.y + lineSpacing) / [self distanceBetweenLines];
-    
-    return (NSInteger) floorf(line);
-}
-
-
-- (NSInteger)lastLineInRect:(CGRect)rect {
-    CGFloat y = CGRectGetMaxY(rect);
-    CGFloat line = (y - _metrics.y) / (_itemSize.height + [self calculateLineSpacing]);
-    
-    return (NSInteger) floorf(line);
 }
 
 
@@ -247,7 +190,7 @@ static NSInteger const SLTUndefinedInteger = -INFINITY;
     CGFloat firstOffset = [self xOriginForColumnNumber:firstColumn];
     CGFloat secondOffset = [self xOriginForColumnNumber:lastColumn];
     
-    return nearestNumberToReferenceNumber(firstOffset, secondOffset, offset);
+    return SLTNearestNumberToReferenceNumber(firstOffset, secondOffset, offset);
 }
 
 @end
