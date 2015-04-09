@@ -6,7 +6,6 @@
 //  Copyright (c) 2015 YOPESO. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import "SLTMetrics.h"
 
 @interface SLTStickyLayoutItemZone : NSObject

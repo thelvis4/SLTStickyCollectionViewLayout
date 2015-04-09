@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
-#import "SLTMetrics.h"
+#import "NSArray+Additions.h"
+#import "Utils.h"
 
 @interface SLTUtilitiesTests : XCTestCase
 

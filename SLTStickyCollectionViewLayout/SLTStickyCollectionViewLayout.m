@@ -8,6 +8,8 @@
 
 #import "SLTStickyCollectionViewLayout.h"
 #import "SLTStickyLayoutSection.h"
+#import "Utils.h"
+#import "NSArray+Additions.h"
 
 @interface SLTStickyCollectionViewLayout ()
 @property (nonatomic) NSMutableArray *sections;
@@ -19,8 +21,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _needsSectionInitialization = YES;
-        [self setupDefaultDimensions];
+        [self setInitialValues];
     }
     return self;
 }
@@ -29,8 +30,7 @@
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        _needsSectionInitialization = YES;
-        [self setupDefaultDimensions];
+        [self setInitialValues];
     }
     return self;
 }
@@ -84,7 +84,7 @@
 
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
-    SLTStickyLayoutSection *section = _sections[(NSUInteger) indexPath.section];
+    SLTStickyLayoutSection *section = _sections[(NSUInteger)indexPath.section];
     
     return [section layoutAttributesForItemAtIndex:indexPath.row];
 }
@@ -99,15 +99,12 @@
 
 - (CGPoint)targetContentOffsetForProposedContentOffset:(CGPoint)proposedContentOffset withScrollingVelocity:(CGPoint)velocity {
     if (!_optimizedScrolling) return proposedContentOffset;
+    if (![self shouldOptimizeScrollingForProposedOffset:proposedContentOffset]) return proposedContentOffset;
     
-    if (proposedContentOffset.x > self.collectionView.contentSize.width - self.collectionView.bounds.size.width - _itemSize.width / 2 - _sectionInset.right) {
-        return proposedContentOffset;
-    }
     CGFloat shiftedX = proposedContentOffset.x + _sectionInset.left;
-    
     NSRange indexRange = [self indexRangeOfSectionsForHorizontalOffset:shiftedX];
     if (NSRangeIsUndefined(indexRange)) return proposedContentOffset;
-
+    
     BOOL indexContainsOneIndex = (0 == indexRange.length);
     if (indexContainsOneIndex) {
         SLTStickyLayoutSection *section = _sections[indexRange.location];
@@ -129,6 +126,12 @@
 
 
 #pragma mark - Private Methods
+
+- (void)setInitialValues {
+    _needsSectionInitialization = YES;
+    [self setupDefaultDimensions];
+}
+
 
 - (void)setupDefaultDimensions {
     _itemSize = CGSizeMake(50.f, 50.f);
@@ -156,20 +159,20 @@
     
     for(NSInteger index = 0; index < numberOfSections; index++) {
         SLTMetrics metrics = [self metricsForSectionAtIndex:index];
-        SLTStickyLayoutSection *section = [self instantiateSectionAtIndex:index metrics:metrics];
+        SLTStickyLayoutSection *section = [self instantiateSectionAtIndex:index withMetrics:metrics];
         [_sections addObject:section];
     }
 }
 
 
-- (SLTStickyLayoutSection *)instantiateSectionAtIndex:(NSInteger)index metrics:(SLTMetrics)metrics {
+- (SLTStickyLayoutSection *)instantiateSectionAtIndex:(NSInteger)index withMetrics:(SLTMetrics)metrics {
     SLTStickyLayoutSection *section = [[SLTStickyLayoutSection alloc] initWithMetrics:metrics];
     section.sectionIndex = index;
     section.itemSize = _itemSize;
     section.minimumLineSpacing = _minimumLineSpacing;
-    section.minimumInteritemSpacing = _interitemSpacing;
-    section.distanceBetweenHeaderAndCells = _distanceBetweenHeaderAndItems;
-    section.distanceBetweenFooterAndCells = _distanceBetweenFooterAndItems;
+    section.interitemSpacing = _interitemSpacing;
+    section.distanceBetweenHeaderAndItems = _distanceBetweenHeaderAndItems;
+    section.distanceBetweenFooterAndItems = _distanceBetweenFooterAndItems;
     section.headerInset = _sectionInset.left;
 
     section.numberOfItems = [self.collectionView numberOfItemsInSection:index];
@@ -250,13 +253,26 @@
 
 
 - (NSRange)indexRangeOfSectionsForHorizontalOffset:(CGFloat)offset {
-    if (offset < [_sections[0] metrics].x) return NSMakeRange(0, 0);
+    CGFloat firstContentX = [_sections[0] metrics].x;
+    if (offset < firstContentX) return NSMakeRange(0, 0);
     
     NSInteger numberOfSections = [self.collectionView numberOfSections];
     
-    if (offset > CGRectGetMaxX([[_sections lastObject] sectionRect])) {
-        return NSMakeRange((NSUInteger) (numberOfSections - 1), 0);
+    CGFloat lastContentX = CGRectGetMaxX([[_sections lastObject] sectionRect]);
+    if (offset > lastContentX) {
+        return NSMakeRange((numberOfSections - 1), 0);
     }
+    
+    
+    for (NSUInteger index = 0; index < numberOfSections - 1; index++) {
+        BOOL offsetIsBetweenSections = [self isXOffset:offset
+                                        betweenSection:_sections[index]
+                                            andSection:_sections[index + 1]];
+        if (offsetIsBetweenSections) {
+            return NSMakeRange(index, 1);
+        }
+    }
+    
     
     for (NSUInteger index = 0; index < numberOfSections; index++) {
         SLTStickyLayoutSection *section = _sections[index];
@@ -272,23 +288,29 @@
             return NSMakeRange(index, 0);
         }
     }
-    
-    for (NSUInteger index = 0; index < numberOfSections - 1; index++) {
-        SLTStickyLayoutSection *section = _sections[index];
-        SLTStickyLayoutSection *nextSection = _sections[index + 1];
-        
-        if (offset > section.metrics.x && offset < nextSection.metrics.x) {
-            return NSMakeRange(index, 1);
-        }
-    }
-    
+
     NSLog(@"SLTStickyCollectionViewLayout BUG: Optimized scrolling might not work properly");
     return NSRangeUndefined;
 }
 
 
+- (BOOL)isXOffset:(CGFloat)offset betweenSection:(SLTStickyLayoutSection *)firstSection andSection:(SLTStickyLayoutSection *)secondSection {
+    return (offset > CGRectGetMaxX([firstSection sectionRect]) && offset < secondSection.metrics.x);
+}
+
+
 - (CGRect)rectWithVisibleLeftEdgeForRect:(CGRect)rect {
     return CGRectFromRectWithX(rect, self.collectionView.contentOffset.x);
+}
+
+
+- (BOOL)shouldOptimizeScrollingForProposedOffset:(CGPoint)proposedContentOffset {
+    return (proposedContentOffset.x <= [self lastXContentOffset] - _itemSize.width / 2 - _sectionInset.right);
+}
+
+
+- (CGFloat)lastXContentOffset {
+    return self.collectionView.contentSize.width - CGRectGetWidth(self.collectionView.bounds);
 }
 
 

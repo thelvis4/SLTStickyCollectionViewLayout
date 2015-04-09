@@ -86,45 +86,46 @@
     XCTAssertTrue(CGRectEqualToRect(itemFrame, expectedFrame), @"The Item frame is not calculated correctly");
 }
 
-//
-//- (void)testHeaderFrameWhenVisibleRectIsNotShowingHeader {
-//    SLTStickyLayoutSection *section = [self createDefaultSectionWithRect:CGRectMake(10, 0, 0, 100)];
-//    section.footerHeight = 0.f;
-//    section.headerHeight = 5.f;
-//    section.headerContentWidth = 30.f;
-//    [section prepareIntermediateMetrics];
-//    
-//    CGRect headerRect = [section headerFrameForVisibleRect:CGRectMake(140, 20, 10, 10)];
-//    XCTAssertEqual(headerRect.origin.x, 10, @"Should return initial frame if visible Rect is out of section header");
-//}
-//
-//
-//- (void)testHeaderFrameWhenVisibleRectHasOffset {
-//    SLTStickyLayoutSection *section = [self createDefaultSectionWithRect:CGRectMake(10, 0, 0, 100)];
-//    section.footerHeight = 0.f;
-//    section.headerHeight = 5.f;
-//    section.headerContentWidth = 30.f;
-//    [section prepareIntermediateMetrics];
-//    
-//    CGRect expectedRect = CGRectMake(20, 0.f, 30.f, 5.f);
-//    CGRect headerRect = [section headerFrameForVisibleRect:CGRectMake(20, 0, 100, 30)];
-//    
-//    XCTAssertTrue(CGRectEqualToRect(headerRect, expectedRect), @"Should return initial frame if visible Rect is out of section header");
-//}
-//
-//
-//- (void)testHeaderFrameWhenSectionEnds {
-//    SLTStickyLayoutSection *section = [self createDefaultSectionWithRect:CGRectMake(10, 0, 0, 100)];
-//    section.footerHeight = 0.f;
-//    section.headerHeight = 5.f;
-//    section.headerContentWidth = 30.f;
-//    [section prepareIntermediateMetrics];
-//    
-//    CGRect expectedRect = CGRectMake([section sectionWidth]+10-section.headerContentWidth, 0.f, 30.f, 5.f);
-//    CGRect headerRect = [section headerFrameForVisibleRect:CGRectMake([section sectionWidth]-10, 0, 100, 30)];
-//    
-//    XCTAssertTrue(CGRectEqualToRect(headerRect, expectedRect), @"Should return initial frame if visible Rect is out of section header");
-//}
+
+- (void)testHeaderFrameWhenVisibleRectIsNotShowingHeader {
+    SLTStickyLayoutSection *section = [self createDefaultSectionWithRect:CGRectMake(10, 0, 0, 100)];
+    section.footerHeight = 0.f;
+    section.headerHeight = 5.f;
+    section.headerContentWidth = 30.f;
+    [section prepareIntermediateMetrics];
+    
+    CGRect headerRect = [section layoutAttributesForHeaderInRect:CGRectMake(140, 20, 10, 10)].frame;
+
+    XCTAssertEqual(headerRect.origin.x, 10, @"Should return initial frame if visible Rect is out of section header");
+}
+
+
+- (void)testHeaderFrameWhenVisibleRectHasOffset {
+    SLTStickyLayoutSection *section = [self createDefaultSectionWithRect:CGRectMake(10, 0, 0, 100)];
+    section.footerHeight = 0.f;
+    section.headerHeight = 5.f;
+    section.headerContentWidth = 30.f;
+    [section prepareIntermediateMetrics];
+    
+    CGRect expectedRect = CGRectMake(20, 0.f, 30.f, 5.f);
+    CGRect headerRect =  [section layoutAttributesForHeaderInRect:CGRectMake(20, 0, 100, 30)].frame;
+    
+    XCTAssertTrue(CGRectEqualToRect(headerRect, expectedRect), @"Should return initial frame if visible Rect is out of section header");
+}
+
+
+- (void)testHeaderFrameWhenSectionEnds {
+    SLTStickyLayoutSection *section = [self createDefaultSectionWithRect:CGRectMake(10, 0, 0, 100)];
+    section.footerHeight = 0.f;
+    section.headerHeight = 5.f;
+    section.headerContentWidth = 30.f;
+    [section prepareIntermediateMetrics];
+    
+    CGRect expectedRect = CGRectMake([section sectionWidth]+10-section.headerContentWidth, 0.f, 30.f, 5.f);
+    CGRect headerRect =  [section layoutAttributesForHeaderInRect:CGRectMake([section sectionWidth]-10, 0, 100, 30)].frame;
+    
+    XCTAssertTrue(CGRectEqualToRect(headerRect, expectedRect), @"Should return initial frame if visible Rect is out of section header");
+}
 
 
 - (void)testNearestColumnOffset {
@@ -152,7 +153,7 @@
     section.itemSize = CGSizeMake(30, 10);
     
     section.minimumLineSpacing = 5.f;
-    section.minimumInteritemSpacing = 5.f;
+    section.interitemSpacing = 5.f;
     
     section.headerHeight = 5.f;
     section.footerHeight = 5.f;
@@ -160,8 +161,8 @@
     section.headerContentWidth = 10.f;
     section.footerContentWidth = 10.f;
     
-    section.distanceBetweenHeaderAndCells = 10.f;
-    section.distanceBetweenFooterAndCells = 10.f;
+    section.distanceBetweenHeaderAndItems = 10.f;
+    section.distanceBetweenFooterAndItems = 10.f;
     
     return section;
 }

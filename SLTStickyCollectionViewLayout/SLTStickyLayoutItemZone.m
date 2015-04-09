@@ -7,20 +7,8 @@
 //
 
 #import "SLTStickyLayoutItemZone.h"
-
-typedef struct SLTPosition {
-    NSInteger line;
-    NSInteger column;
-} SLTPosition;
-
-SLTPosition SLTPositionMake(NSInteger line, NSInteger column) {
-    SLTPosition position;
-    position.line = line;
-    position.column = column;
-    
-    return position;
-}
-
+#import "SLTPosition.h"
+#import "Utils.h"
 
 static NSInteger const SLTUndefinedInteger = -INFINITY;
 

@@ -8,6 +8,7 @@
 
 #import "SLTStickyLayoutSection.h"
 #import "SLTStickyLayoutItemZone.h"
+#import "Utils.h"
 
 @interface SLTStickyLayoutSection ()
 @property (nonatomic, readwrite) SLTMetrics metrics;
@@ -36,27 +37,17 @@
     _itemZone.itemSize = _itemSize;
     _itemZone.numberOfItems = _numberOfItems;
     _itemZone.minimumLineSpacing = _minimumLineSpacing;
-    _itemZone.interitemSpacing = _minimumInteritemSpacing;
+    _itemZone.interitemSpacing = _interitemSpacing;
 }
 
 
 - (CGFloat)sectionWidth {
-    return maximumFloat([_itemZone calculateZoneWidth], _headerContentWidth, _footerContentWidth);
+    return SLTMaximumFloat([_itemZone calculateZoneWidth], _headerContentWidth, _footerContentWidth);
 }
 
 
 - (CGRect)sectionRect {
     return CGRectFromMetrics(_metrics, [self sectionWidth]);
-}
-
-
-- (NSIndexPath *)headerIndexPath {
-    return [NSIndexPath indexPathForItem:0 inSection:_sectionIndex];
-}
-
-
-- (NSIndexPath *)footerIndexPath {
-    return [NSIndexPath indexPathForItem:0 inSection:_sectionIndex];
 }
 
 
@@ -67,6 +58,61 @@
 
 - (BOOL)hasFooterInRect:(CGRect)rect {
     return _footerHeight > 0.f && [self footerIntersectsRect:rect];
+}
+
+
+- (NSArray *)layoutAttributesForItemsInRect:(CGRect)rect {
+    NSMutableArray *attributesInRect = [NSMutableArray arrayWithCapacity:_numberOfItems];
+    
+    for (UICollectionViewLayoutAttributes *attributes in self.attributes) {
+        if(CGRectIntersectsRect(rect, attributes.frame)){
+            [attributesInRect addObject:attributes];
+        }
+    }
+    
+    return attributesInRect;
+}
+
+
+- (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndex:(NSInteger)index {
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:index inSection:_sectionIndex];
+    UICollectionViewLayoutAttributes *attributes = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
+    attributes.frame = [_itemZone frameForItemAtIndex:index];
+    
+    return attributes;
+}
+
+
+- (UICollectionViewLayoutAttributes *)layoutAttributesForHeaderInRect:(CGRect)rect {
+    CGRect headerFrame = [self headerFrameForVisibleRect:rect];
+    UICollectionViewLayoutAttributes *headerAttributes = [self layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                                                                                              atIndexPath:[self headerIndexPath]];
+    [headerAttributes setFrame:headerFrame];
+    
+    return headerAttributes;
+}
+
+
+- (UICollectionViewLayoutAttributes *)layoutAttributesForFooterInRect:(CGRect)rect {
+    CGRect footerFrame = [self footerFrameForVisibleRect:rect];
+    UICollectionViewLayoutAttributes *footerAttributes = [self layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionFooter
+                                                                                              atIndexPath:[self footerIndexPath]];
+    [footerAttributes setFrame:footerFrame];
+    
+    return footerAttributes;
+}
+
+
+
+#pragma mark - Private Methods
+
+- (NSIndexPath *)headerIndexPath {
+    return [NSIndexPath indexPathForItem:0 inSection:_sectionIndex];
+}
+
+
+- (NSIndexPath *)footerIndexPath {
+    return [NSIndexPath indexPathForItem:0 inSection:_sectionIndex];
 }
 
 
@@ -103,51 +149,6 @@
 }
 
 
-- (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndex:(NSInteger)index {
-    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:index inSection:_sectionIndex];
-    UICollectionViewLayoutAttributes *attributes = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
-    attributes.frame = [_itemZone frameForItemAtIndex:index];
-    
-    return attributes;
-}
-
-
-- (NSArray *)layoutAttributesForItemsInRect:(CGRect)rect {
-    NSMutableArray *attributesInRect = [NSMutableArray arrayWithCapacity:_numberOfItems];
-    
-    for (UICollectionViewLayoutAttributes *attributes in self.attributes) {
-        if(CGRectIntersectsRect(rect, attributes.frame)){
-            [attributesInRect addObject:attributes];
-        }
-    }
-    
-    return attributesInRect;
-}
-
-
-- (UICollectionViewLayoutAttributes *)layoutAttributesForHeaderInRect:(CGRect)rect {
-    CGRect headerFrame = [self headerFrameForVisibleRect:rect];
-    UICollectionViewLayoutAttributes *headerAttributes = [self layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionHeader
-                                                                                              atIndexPath:[self headerIndexPath]];
-    [headerAttributes setFrame:headerFrame];
-    
-    return headerAttributes;
-}
-
-
-- (UICollectionViewLayoutAttributes *)layoutAttributesForFooterInRect:(CGRect)rect {
-    CGRect footerFrame = [self footerFrameForVisibleRect:rect];
-    UICollectionViewLayoutAttributes *footerAttributes = [self layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionFooter
-                                                                                              atIndexPath:[self footerIndexPath]];
-    [footerAttributes setFrame:footerFrame];
-    
-    return footerAttributes;
-}
-
-
-
-#pragma mark - Private Methods
-
 - (UICollectionViewLayoutAttributes *)layoutAttributesForSupplementaryViewOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath {
     return [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind:elementKind withIndexPath:indexPath];
 }
@@ -174,13 +175,13 @@
         metrics.height -= _headerHeight;
         metrics.y += _headerHeight;
         
-        metrics.height -= _distanceBetweenHeaderAndCells;
-        metrics.y += _distanceBetweenHeaderAndCells;
+        metrics.height -= _distanceBetweenHeaderAndItems;
+        metrics.y += _distanceBetweenHeaderAndItems;
     }
     
     if (_footerHeight > 0.f) {
         metrics.height -= _footerHeight;
-        metrics.height -= _distanceBetweenFooterAndCells;
+        metrics.height -= _distanceBetweenFooterAndItems;
     }
     
     return  metrics;

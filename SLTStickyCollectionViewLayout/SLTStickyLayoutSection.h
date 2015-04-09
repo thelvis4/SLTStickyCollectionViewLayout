@@ -6,7 +6,6 @@
 //  Copyright (c) 2015 YOPESO. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import "SLTMetrics.h"
 
 @interface SLTStickyLayoutSection : NSObject
@@ -16,10 +15,10 @@
 @property (assign, nonatomic) CGSize itemSize;
 
 @property (nonatomic) CGFloat minimumLineSpacing;
-@property (nonatomic) CGFloat minimumInteritemSpacing;
+@property (nonatomic) CGFloat interitemSpacing;
 
-@property (nonatomic) CGFloat distanceBetweenHeaderAndCells;
-@property (nonatomic) CGFloat distanceBetweenFooterAndCells;
+@property (nonatomic) CGFloat distanceBetweenHeaderAndItems;
+@property (nonatomic) CGFloat distanceBetweenFooterAndItems;
 
 @property (nonatomic) CGFloat headerHeight;
 @property (nonatomic) CGFloat footerHeight;

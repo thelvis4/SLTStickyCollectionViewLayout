@@ -7,13 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A35CC2F11AD675D70064360F /* SLTMetrics.m in Sources */ = {isa = PBXBuildFile; fileRef = A35CC2EE1AD675D70064360F /* SLTMetrics.m */; };
+		A35CC2F21AD675D70064360F /* SLTPosition.m in Sources */ = {isa = PBXBuildFile; fileRef = A35CC2F01AD675D70064360F /* SLTPosition.m */; };
+		A35CC2F51AD6762E0064360F /* NSArray+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = A35CC2F41AD6762E0064360F /* NSArray+Additions.m */; };
+		A35CC2F81AD676960064360F /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = A35CC2F71AD676960064360F /* Utils.m */; };
 		A363224F1ACE91C100DC3775 /* SLTUtilitiesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A363224E1ACE91C100DC3775 /* SLTUtilitiesTests.m */; };
 		A36322511ACEC54F00DC3775 /* SLTStickyCollectionViewLayoutTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A36322501ACEC54F00DC3775 /* SLTStickyCollectionViewLayoutTests.m */; };
 		A36322611ACEC5BC00DC3775 /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A36322561ACEC5BC00DC3775 /* libOCMock.a */; };
 		A377C9891ACBE53C00DD0558 /* libSLTStickyCollectionViewLayout.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A377C97D1ACBE53B00DD0558 /* libSLTStickyCollectionViewLayout.a */; };
 		A377C99F1ACBE6EE00DD0558 /* SLTStickyLayoutItemZoneTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A377C99D1ACBE6EE00DD0558 /* SLTStickyLayoutItemZoneTests.m */; };
 		A377C9A01ACBE6EE00DD0558 /* SLTStickyLayoutSectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A377C99E1ACBE6EE00DD0558 /* SLTStickyLayoutSectionTests.m */; };
-		A3AC85B21AD583C700FDEDBC /* SLTMetrics.m in Sources */ = {isa = PBXBuildFile; fileRef = A3AC85A71AD5836400FDEDBC /* SLTMetrics.m */; };
 		A3AC85B31AD583C700FDEDBC /* SLTStickyCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = A3AC85A91AD5836400FDEDBC /* SLTStickyCollectionViewLayout.m */; };
 		A3AC85B41AD583C700FDEDBC /* SLTStickyLayoutItemZone.m in Sources */ = {isa = PBXBuildFile; fileRef = A3AC85AB1AD5836400FDEDBC /* SLTStickyLayoutItemZone.m */; };
 		A3AC85B51AD583C700FDEDBC /* SLTStickyLayoutSection.m in Sources */ = {isa = PBXBuildFile; fileRef = A3AC85AD1AD5836400FDEDBC /* SLTStickyLayoutSection.m */; };
@@ -44,6 +47,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A35CC2ED1AD675D70064360F /* SLTMetrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLTMetrics.h; sourceTree = "<group>"; };
+		A35CC2EE1AD675D70064360F /* SLTMetrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTMetrics.m; sourceTree = "<group>"; };
+		A35CC2EF1AD675D70064360F /* SLTPosition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLTPosition.h; sourceTree = "<group>"; };
+		A35CC2F01AD675D70064360F /* SLTPosition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTPosition.m; sourceTree = "<group>"; };
+		A35CC2F31AD6762E0064360F /* NSArray+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Additions.h"; sourceTree = "<group>"; };
+		A35CC2F41AD6762E0064360F /* NSArray+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Additions.m"; sourceTree = "<group>"; };
+		A35CC2F61AD676960064360F /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
+		A35CC2F71AD676960064360F /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		A363224E1ACE91C100DC3775 /* SLTUtilitiesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTUtilitiesTests.m; sourceTree = "<group>"; };
 		A36322501ACEC54F00DC3775 /* SLTStickyCollectionViewLayoutTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTStickyCollectionViewLayoutTests.m; sourceTree = "<group>"; };
 		A36322561ACEC5BC00DC3775 /* libOCMock.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libOCMock.a; sourceTree = "<group>"; };
@@ -61,8 +72,6 @@
 		A377C98E1ACBE53C00DD0558 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A377C99D1ACBE6EE00DD0558 /* SLTStickyLayoutItemZoneTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTStickyLayoutItemZoneTests.m; sourceTree = "<group>"; };
 		A377C99E1ACBE6EE00DD0558 /* SLTStickyLayoutSectionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTStickyLayoutSectionTests.m; sourceTree = "<group>"; };
-		A3AC85A61AD5836400FDEDBC /* SLTMetrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLTMetrics.h; sourceTree = "<group>"; };
-		A3AC85A71AD5836400FDEDBC /* SLTMetrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTMetrics.m; sourceTree = "<group>"; };
 		A3AC85A81AD5836400FDEDBC /* SLTStickyCollectionViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLTStickyCollectionViewLayout.h; sourceTree = "<group>"; };
 		A3AC85A91AD5836400FDEDBC /* SLTStickyCollectionViewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTStickyCollectionViewLayout.m; sourceTree = "<group>"; };
 		A3AC85AA1AD5836400FDEDBC /* SLTStickyLayoutItemZone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLTStickyLayoutItemZone.h; sourceTree = "<group>"; };
@@ -91,6 +100,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A35CC2EC1AD675D70064360F /* HelpingClasses */ = {
+			isa = PBXGroup;
+			children = (
+				A35CC2ED1AD675D70064360F /* SLTMetrics.h */,
+				A35CC2EE1AD675D70064360F /* SLTMetrics.m */,
+				A35CC2EF1AD675D70064360F /* SLTPosition.h */,
+				A35CC2F01AD675D70064360F /* SLTPosition.m */,
+				A35CC2F31AD6762E0064360F /* NSArray+Additions.h */,
+				A35CC2F41AD6762E0064360F /* NSArray+Additions.m */,
+				A35CC2F61AD676960064360F /* Utils.h */,
+				A35CC2F71AD676960064360F /* Utils.m */,
+			);
+			path = HelpingClasses;
+			sourceTree = "<group>";
+		};
 		A36322541ACEC5BC00DC3775 /* ExternalSources */ = {
 			isa = PBXGroup;
 			children = (
@@ -166,14 +190,13 @@
 		A3AC85A51AD5836400FDEDBC /* SLTStickyCollectionViewLayout */ = {
 			isa = PBXGroup;
 			children = (
-				A3AC85A61AD5836400FDEDBC /* SLTMetrics.h */,
-				A3AC85A71AD5836400FDEDBC /* SLTMetrics.m */,
+				A35CC2EC1AD675D70064360F /* HelpingClasses */,
 				A3AC85A81AD5836400FDEDBC /* SLTStickyCollectionViewLayout.h */,
 				A3AC85A91AD5836400FDEDBC /* SLTStickyCollectionViewLayout.m */,
-				A3AC85AA1AD5836400FDEDBC /* SLTStickyLayoutItemZone.h */,
-				A3AC85AB1AD5836400FDEDBC /* SLTStickyLayoutItemZone.m */,
 				A3AC85AC1AD5836400FDEDBC /* SLTStickyLayoutSection.h */,
 				A3AC85AD1AD5836400FDEDBC /* SLTStickyLayoutSection.m */,
+				A3AC85AA1AD5836400FDEDBC /* SLTStickyLayoutItemZone.h */,
+				A3AC85AB1AD5836400FDEDBC /* SLTStickyLayoutItemZone.m */,
 			);
 			path = SLTStickyCollectionViewLayout;
 			sourceTree = "<group>";
@@ -283,9 +306,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A35CC2F21AD675D70064360F /* SLTPosition.m in Sources */,
 				A3AC85B51AD583C700FDEDBC /* SLTStickyLayoutSection.m in Sources */,
 				A3AC85B41AD583C700FDEDBC /* SLTStickyLayoutItemZone.m in Sources */,
-				A3AC85B21AD583C700FDEDBC /* SLTMetrics.m in Sources */,
+				A35CC2F11AD675D70064360F /* SLTMetrics.m in Sources */,
+				A35CC2F51AD6762E0064360F /* NSArray+Additions.m in Sources */,
+				A35CC2F81AD676960064360F /* Utils.m in Sources */,
 				A3AC85B31AD583C700FDEDBC /* SLTStickyCollectionViewLayout.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
