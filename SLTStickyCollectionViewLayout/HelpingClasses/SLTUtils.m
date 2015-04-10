@@ -7,7 +7,7 @@
 //  Copyright (c) 2015 YOPESO. All rights reserved.
 //
 
-#import "Utils.h"
+#import "SLTUtils.h"
 
 CGRect CGRectFromRectWithX(CGRect rect, CGFloat x) {
     CGRect changedRect = rect;
@@ -36,6 +36,13 @@ CGFloat SLTNearestNumberToReferenceNumber(CGFloat a, CGFloat b, CGFloat referenc
     return (ABS(referenceNumber - b) < ABS(referenceNumber - a)) ? b : a;
 }
 
+
+BOOL SLTFloatIsBetweenFloats(CGFloat number, CGFloat firstNumber, CGFloat secondNumber) {
+    if (number > firstNumber && number < secondNumber) return YES;
+    if (number < firstNumber && number > secondNumber) return YES;
+    
+    return NO;
+}
 
 const NSRange NSRangeUndefined = {INFINITY,0};
 

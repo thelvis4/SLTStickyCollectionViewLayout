@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 #import "NSArray+Additions.h"
-#import "Utils.h"
+#import "SLTUtils.h"
 
 @interface SLTUtilitiesTests : XCTestCase
 

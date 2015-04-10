@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A353018A1AD6D08D00129918 /* SLTUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = A35301891AD6D08D00129918 /* SLTUtils.m */; };
 		A35CC2F11AD675D70064360F /* SLTMetrics.m in Sources */ = {isa = PBXBuildFile; fileRef = A35CC2EE1AD675D70064360F /* SLTMetrics.m */; };
 		A35CC2F21AD675D70064360F /* SLTPosition.m in Sources */ = {isa = PBXBuildFile; fileRef = A35CC2F01AD675D70064360F /* SLTPosition.m */; };
 		A35CC2F51AD6762E0064360F /* NSArray+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = A35CC2F41AD6762E0064360F /* NSArray+Additions.m */; };
-		A35CC2F81AD676960064360F /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = A35CC2F71AD676960064360F /* Utils.m */; };
 		A363224F1ACE91C100DC3775 /* SLTUtilitiesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A363224E1ACE91C100DC3775 /* SLTUtilitiesTests.m */; };
 		A36322511ACEC54F00DC3775 /* SLTStickyCollectionViewLayoutTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A36322501ACEC54F00DC3775 /* SLTStickyCollectionViewLayoutTests.m */; };
 		A36322611ACEC5BC00DC3775 /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A36322561ACEC5BC00DC3775 /* libOCMock.a */; };
@@ -47,14 +47,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A35301881AD6D08D00129918 /* SLTUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLTUtils.h; sourceTree = "<group>"; };
+		A35301891AD6D08D00129918 /* SLTUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTUtils.m; sourceTree = "<group>"; };
 		A35CC2ED1AD675D70064360F /* SLTMetrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLTMetrics.h; sourceTree = "<group>"; };
 		A35CC2EE1AD675D70064360F /* SLTMetrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTMetrics.m; sourceTree = "<group>"; };
 		A35CC2EF1AD675D70064360F /* SLTPosition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLTPosition.h; sourceTree = "<group>"; };
 		A35CC2F01AD675D70064360F /* SLTPosition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTPosition.m; sourceTree = "<group>"; };
 		A35CC2F31AD6762E0064360F /* NSArray+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Additions.h"; sourceTree = "<group>"; };
 		A35CC2F41AD6762E0064360F /* NSArray+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Additions.m"; sourceTree = "<group>"; };
-		A35CC2F61AD676960064360F /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
-		A35CC2F71AD676960064360F /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		A363224E1ACE91C100DC3775 /* SLTUtilitiesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTUtilitiesTests.m; sourceTree = "<group>"; };
 		A36322501ACEC54F00DC3775 /* SLTStickyCollectionViewLayoutTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTStickyCollectionViewLayoutTests.m; sourceTree = "<group>"; };
 		A36322561ACEC5BC00DC3775 /* libOCMock.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libOCMock.a; sourceTree = "<group>"; };
@@ -109,8 +109,8 @@
 				A35CC2F01AD675D70064360F /* SLTPosition.m */,
 				A35CC2F31AD6762E0064360F /* NSArray+Additions.h */,
 				A35CC2F41AD6762E0064360F /* NSArray+Additions.m */,
-				A35CC2F61AD676960064360F /* Utils.h */,
-				A35CC2F71AD676960064360F /* Utils.m */,
+				A35301881AD6D08D00129918 /* SLTUtils.h */,
+				A35301891AD6D08D00129918 /* SLTUtils.m */,
 			);
 			path = HelpingClasses;
 			sourceTree = "<group>";
@@ -307,11 +307,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				A35CC2F21AD675D70064360F /* SLTPosition.m in Sources */,
+				A353018A1AD6D08D00129918 /* SLTUtils.m in Sources */,
 				A3AC85B51AD583C700FDEDBC /* SLTStickyLayoutSection.m in Sources */,
 				A3AC85B41AD583C700FDEDBC /* SLTStickyLayoutItemZone.m in Sources */,
 				A35CC2F11AD675D70064360F /* SLTMetrics.m in Sources */,
 				A35CC2F51AD6762E0064360F /* NSArray+Additions.m in Sources */,
-				A35CC2F81AD676960064360F /* Utils.m in Sources */,
 				A3AC85B31AD583C700FDEDBC /* SLTStickyCollectionViewLayout.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -416,6 +416,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				LLVM_LTO = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -427,6 +428,7 @@
 			buildSettings = {
 				GCC_OPTIMIZATION_LEVEL = 3;
 				LLVM_LTO = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

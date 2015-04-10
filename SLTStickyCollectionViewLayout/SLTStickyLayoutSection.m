@@ -8,7 +8,7 @@
 
 #import "SLTStickyLayoutSection.h"
 #import "SLTStickyLayoutItemZone.h"
-#import "Utils.h"
+#import "SLTUtils.h"
 
 @interface SLTStickyLayoutSection ()
 @property (nonatomic, readwrite) SLTMetrics metrics;

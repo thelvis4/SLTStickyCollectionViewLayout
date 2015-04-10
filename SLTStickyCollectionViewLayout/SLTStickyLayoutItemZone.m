@@ -8,7 +8,7 @@
 
 #import "SLTStickyLayoutItemZone.h"
 #import "SLTPosition.h"
-#import "Utils.h"
+#import "SLTUtils.h"
 
 static NSInteger const SLTUndefinedInteger = -INFINITY;
 
@@ -71,7 +71,7 @@ static NSInteger const SLTUndefinedInteger = -INFINITY;
     
     NSInteger numberOfLines = [self numberOfLines];
     BOOL isEnoughSpace = (numberOfLines != 0);
-    NSInteger column = isEnoughSpace ? index / numberOfLines : index; // there is at least a line of items
+    NSInteger column = isEnoughSpace ? index / numberOfLines : index; // there should at least a line of items
     NSInteger line = isEnoughSpace ? index % numberOfLines : 0;
     
     return SLTPositionMake(line, column);
@@ -173,7 +173,6 @@ static NSInteger const SLTUndefinedInteger = -INFINITY;
     
     NSInteger firstColumn = [self firstColumnInRect:intersectedRect];
     NSInteger lastColumn = [self lastColumnInRect:intersectedRect];
-    
     
     CGFloat firstOffset = [self xOriginForColumnNumber:firstColumn];
     CGFloat secondOffset = [self xOriginForColumnNumber:lastColumn];

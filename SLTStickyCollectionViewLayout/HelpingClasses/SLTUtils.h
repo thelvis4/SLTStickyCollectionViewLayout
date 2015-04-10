@@ -13,5 +13,7 @@ CGRect CGRectFromRectWithX(CGRect rect, CGFloat x);
 CGFloat SLTMaximumFloat(CGFloat first, CGFloat second, CGFloat third);
 CGFloat SLTNearestNumberToReferenceNumber(CGFloat a, CGFloat b, CGFloat referenceNumber);
 
+BOOL SLTFloatIsBetweenFloats(CGFloat number, CGFloat firstNumber, CGFloat secondNumber);
+
 extern const NSRange NSRangeUndefined;
 BOOL NSRangeIsUndefined(NSRange range);
