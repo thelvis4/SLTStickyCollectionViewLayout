@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 YOPESO. All rights reserved.
 //
 
-// Version 1.0
+// Version 1.1
 
 #import <UIKit/UIKit.h>
 @class SLTStickyCollectionViewLayout;
@@ -102,5 +102,11 @@
 @property (nonatomic, getter=isOptimizedScrolling) BOOL optimizedScrolling;
 
 - (CGRect)frameForSectionAtIndex:(NSUInteger)sectionIndex;
+
+/**
+ Invalidates the current layout and triggers a layout update.
+ You can call this method at any time to update the layout information. 
+ */
+- (void)updateLayout;
 
 @end

@@ -43,6 +43,12 @@
 }
 
 
+- (void)updateLayout {
+    _needsSectionInitialization = YES;
+    [self invalidateLayout];
+}
+
+
 #pragma mark - Override Methods
 
 - (void)prepareLayout {
@@ -94,12 +100,6 @@
     _needsSectionInitialization = !CGSizeEqualToSize(newBounds.size, self.collectionView.bounds.size);
     
     return YES;
-}
-
-
-- (void)invalidateLayout {
-    _needsSectionInitialization = YES;
-    [super invalidateLayout];
 }
 
 
