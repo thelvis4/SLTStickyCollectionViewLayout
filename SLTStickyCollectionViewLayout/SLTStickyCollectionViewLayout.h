@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 YOPESO. All rights reserved.
 //
 
-// Version 1.1
+// Version 1.1.1
 
 #import <UIKit/UIKit.h>
 @class SLTStickyCollectionViewLayout;

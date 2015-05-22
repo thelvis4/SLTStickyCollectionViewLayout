@@ -37,7 +37,9 @@
 
 
 - (CGRect)frameForSectionAtIndex:(NSUInteger)sectionIndex {
-    if (![_sections containsObjectAtIndex:sectionIndex]) return CGRectZero;
+    if (![_sections containsObjectAtIndex:sectionIndex]) {
+        [self initializeSections];
+    }
     
     return [_sections[sectionIndex] sectionRect];
 }
