@@ -1,0 +1,4 @@
+language: objective-c
+xcode_project: SLTStickyCollectionViewLayout.xcodeproj  # path to your xcodeproj folder
+xcode_scheme: SLTStickyCollectionViewLayout
+xcode_sdk: iphonesimulator
