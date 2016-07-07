@@ -174,6 +174,10 @@
         SLTStickyLayoutSection *section = [self instantiateSectionAtIndex:index withMetrics:metrics];
         [_sections addObject:section];
     }
+    
+    if ([self.delegate respondsToSelector:@selector(collectionView:didFinishUpdateLayout:)]) {
+        [self.delegate collectionView:self.collectionView didFinishUpdateLayout:self];
+    }
 }
 
 
