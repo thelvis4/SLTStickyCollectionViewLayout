@@ -19,6 +19,8 @@
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(SLTStickyCollectionViewLayout *)layout headerHeightInSection:(NSInteger)section;
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(SLTStickyCollectionViewLayout *)layout footerHeightInSection:(NSInteger)section;
 
+- (void)collectionView:(UICollectionView *)collectionView didFinishUpdateLayout:(SLTStickyCollectionViewLayout *)layout;
+
 @end
 
 
